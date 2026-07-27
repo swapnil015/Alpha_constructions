@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "//": "Vercel has no PHP runtime, so the live PHP app cannot be deployed here. dist/ is a static snapshot produced by ./build-static.sh — see that script for what the snapshot cannot do (forms, admin).",
+
+  "outputDirectory": "dist",
+  "framework": null,
+
+  "//cleanUrls": "Serves dist/about.html at /about, matching the PHP front controller's extensionless routes.",
+  "cleanUrls": true,
+  "trailingSlash": false,
+
+  "headers": [
+    {
+      "//": "The hero sequence is 240 immutable frames fetched on first visit.",
+      "source": "/assets/frames/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/assets/(css|js)/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+      ]
+    }
+  ]
+}
