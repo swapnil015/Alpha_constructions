@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "alpha-concern",
+      "runtimeExecutable": "php",
+      "runtimeArgs": ["-S", "localhost:8080", "-t", "Alpha Concerns/public_html", "Alpha Concerns/router.dev.php"],
+      "port": 8080
+    }
+  ]
+}

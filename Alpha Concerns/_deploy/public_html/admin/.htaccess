@@ -1,0 +1,17 @@
+# Admin panel — strict no-cache + tight headers
+<IfModule mod_headers.c>
+  Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+  Header set Pragma "no-cache"
+  Header set X-Frame-Options "DENY"
+</IfModule>
+Options -Indexes
+DirectoryIndex index.php login.php
+
+# All requests inside /admin/ go through admin/index.php (admin router)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  RewriteRule ^ index.php [L,QSA]
+</IfModule>

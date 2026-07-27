@@ -1,0 +1,77 @@
+# Alpha Concern — public_html .htaccess
+# Tested on Apache 2.4 with mod_rewrite, mod_deflate, mod_expires, mod_headers.
+
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+# ---------------------------------------------------------------------------
+# Force HTTPS (uncomment after SSL is provisioned)
+# ---------------------------------------------------------------------------
+# RewriteEngine On
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# ---------------------------------------------------------------------------
+# Front-controller routing
+# ---------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Skip rewriting /admin/, /api/, /assets/, /uploads/ (handled directly)
+  RewriteRule ^(admin|api|assets|uploads)(/|$) - [L]
+  # Allow direct access to existing files / dirs (e.g. favicon.svg)
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  # Everything else → index.php (dynamic sitemap.xml, robots.txt, pages)
+  RewriteRule ^ index.php [L,QSA]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Compression
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Browser caching
+# ---------------------------------------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault                              "access plus 1 month"
+  ExpiresByType text/html                     "access plus 0 seconds"
+  ExpiresByType image/webp                    "access plus 1 year"
+  ExpiresByType image/jpeg                    "access plus 1 year"
+  ExpiresByType image/png                     "access plus 1 year"
+  ExpiresByType image/svg+xml                 "access plus 1 year"
+  ExpiresByType text/css                      "access plus 1 month"
+  ExpiresByType application/javascript        "access plus 1 month"
+  ExpiresByType font/woff2                    "access plus 1 year"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set X-XSS-Protection "1; mode=block"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  # HSTS — enable once HTTPS is verified and stable for at least a week:
+  # Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # Content Security Policy — allow GSAP/Alpine/GA from CDN; tighten as desired.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: https://www.google-analytics.com https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com data:; frame-src https://www.google.com; connect-src 'self' https://www.google-analytics.com"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Block sensitive files
+# ---------------------------------------------------------------------------
+<FilesMatch "\.(env|json|md|sql|log|htaccess|htpasswd|ini)$">
+  Require all denied
+</FilesMatch>
+
+# ---------------------------------------------------------------------------
+# Custom 404 (handled by router)
+# ---------------------------------------------------------------------------
+ErrorDocument 404 /index.php?_404=1

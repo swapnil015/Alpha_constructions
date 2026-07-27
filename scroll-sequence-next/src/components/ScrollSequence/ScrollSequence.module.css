@@ -1,0 +1,157 @@
+/* ===========================================================================
+   <ScrollSequence> — scoped styles
+   Layout only. Typography and colour belong to the consuming app; the few
+   colours here are neutral fallbacks driven by CSS variables the app can set.
+   =========================================================================== */
+
+.scene {
+  position: relative;
+  background: var(--sequence-bg, #2b2b2d);
+}
+
+/*
+  `100svh` (small viewport height) is deliberate: on mobile it stays constant
+  while the browser chrome collapses, so the pinned stage never resizes
+  mid-scroll and the sequence never jumps.
+*/
+.stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--sequence-bg, #2b2b2d);
+}
+
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Keeps overlay text legible over any frame without dimming the whole image. */
+.scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom,
+      rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0) 22%,
+      rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, .7) 100%),
+    radial-gradient(120% 85% at 50% 45%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, .45) 100%);
+}
+
+/* -- Captions --------------------------------------------------------------- */
+.caption {
+  position: absolute;
+  z-index: 3;
+  left: var(--sequence-gutter, clamp(1.25rem, 4vw, 3.5rem));
+  bottom: clamp(5rem, 14vh, 9rem);
+  max-width: min(30rem, 74vw);
+  pointer-events: none;
+  will-change: opacity, transform;
+}
+.caption > * { pointer-events: auto; }
+
+/* -- Progress rail ---------------------------------------------------------- */
+.rail {
+  position: absolute;
+  z-index: 3;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, .1);
+}
+.railFill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: var(--sequence-accent, #c8922a);
+}
+
+/* -- Loader ----------------------------------------------------------------- */
+.loader {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: var(--sequence-loader-bg, #003030);
+  transition: opacity .9s cubic-bezier(.22, 1, .36, 1), visibility .9s;
+}
+.loaderDone {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loaderTrack {
+  width: min(240px, 46vw);
+  height: 1px;
+  background: rgba(255, 255, 255, .16);
+  overflow: hidden;
+}
+.loaderBar {
+  display: block;
+  height: 100%;
+  background: var(--sequence-accent, #c8922a);
+  transition: width .25s linear;
+}
+
+.loaderPct {
+  font-size: .65rem;
+  letter-spacing: .28em;
+  color: rgba(255, 255, 255, .45);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   Narrow / portrait viewports.
+
+   A 16:9 sequence cover-fitted into a portrait viewport loses more than half
+   its width. Instead the canvas becomes a fixed-ratio band and overlay content
+   takes the space beneath it. The hook measures the canvas element itself, so
+   the backing store follows this band at the correct device-pixel ratio.
+   --------------------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .canvas {
+    position: absolute;
+    top: clamp(4.5rem, 12vh, 7rem);
+    left: 0; right: 0;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--sequence-mobile-ratio, 3 / 2);
+  }
+
+  .scrim {
+    background: linear-gradient(to bottom,
+      rgba(0, 0, 0, .5) 0%, rgba(0, 0, 0, 0) 16%,
+      rgba(0, 0, 0, 0) 44%, rgba(0, 0, 0, .86) 70%);
+  }
+
+  .caption {
+    left: var(--sequence-gutter, clamp(1.25rem, 4vw, 3.5rem));
+    right: var(--sequence-gutter, clamp(1.25rem, 4vw, 3.5rem));
+    max-width: none;
+    bottom: clamp(3rem, 9vh, 5.5rem);
+  }
+}
+
+/* Landscape phones: the viewport is wider than the band ratio anyway, so go
+   back to full-bleed cover. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .canvas {
+    position: static;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+  .caption { bottom: 2.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader { transition: none; }
+}

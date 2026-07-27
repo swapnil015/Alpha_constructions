@@ -1,0 +1,11 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Generated at build time by scripts/generate-frame-manifest.mjs
+public/frames/manifest.json
+
+.env*.local
+.DS_Store

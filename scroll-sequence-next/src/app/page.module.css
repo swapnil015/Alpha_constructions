@@ -1,0 +1,110 @@
+/* Demo-page chrome. The sequence component ships its own layout styles. */
+
+.bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(1.1rem, 3vw, 1.9rem) var(--sequence-gutter);
+  pointer-events: none;
+}
+.bar > * { pointer-events: auto; }
+
+.mark {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(.82rem, 1.5vw, .95rem);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.barLink {
+  font-size: .7rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: color .4s, border-color .4s;
+}
+.barLink:hover { color: var(--ink); border-color: var(--accent); }
+
+/* -- Caption content -------------------------------------------------------- */
+.eyebrow {
+  font-size: .66rem;
+  letter-spacing: .28em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  margin-bottom: 1.1rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2.4rem, 6.4vw, 4.6rem);
+  line-height: 1.02;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+.title em { font-style: italic; color: var(--accent-light); }
+
+.body {
+  margin: 1.15rem 0 0;
+  font-size: clamp(.9rem, 1.6vw, 1.02rem);
+  color: var(--muted);
+  max-width: 30ch;
+}
+
+.cta {
+  display: inline-block;
+  margin-top: 1.6rem;
+  padding: .85rem 1.9rem;
+  background: var(--accent);
+  color: var(--primary);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  transition: background .4s, transform .4s;
+}
+.cta:hover { background: var(--accent-light); transform: translateY(-2px); }
+
+/* -- After the sequence ------------------------------------------------------ */
+.after {
+  position: relative;
+  z-index: 2;
+  background: var(--primary);
+  padding: clamp(6rem, 16vw, 12rem) var(--sequence-gutter);
+}
+.afterInner { max-width: 62rem; margin: 0 auto; }
+
+.afterTitle {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(2rem, 5.2vw, 3.6rem);
+  line-height: 1.08;
+  margin: 0 0 1.6rem;
+}
+.afterBody { max-width: 46ch; }
+
+.afterCta {
+  display: inline-block;
+  margin-top: 3rem;
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: .72rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  padding-bottom: .55rem;
+  border-bottom: 1px solid var(--accent);
+}
+
+@media (max-width: 720px) {
+  .title { font-size: clamp(2rem, 9vw, 3rem); }
+  .body { max-width: none; font-size: .92rem; }
+}

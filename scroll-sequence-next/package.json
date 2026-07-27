@@ -1,0 +1,27 @@
+{
+  "name": "scroll-sequence-next",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reusable Apple-style scroll-driven image sequence component for Next.js.",
+  "scripts": {
+    "predev": "node scripts/generate-frame-manifest.mjs",
+    "dev": "next dev",
+    "prebuild": "node scripts/generate-frame-manifest.mjs",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "manifest": "node scripts/generate-frame-manifest.mjs"
+  },
+  "dependencies": {
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}

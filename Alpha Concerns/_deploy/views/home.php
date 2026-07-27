@@ -1,0 +1,215 @@
+<?php
+$page_description = setting('hero_subheadline');
+partial('head', compact('page_title','page_description'));
+partial('header');
+$projects = db_all("SELECT * FROM projects WHERE is_published=1 AND is_featured=1 ORDER BY sort_order LIMIT 6");
+$services = db_all("SELECT * FROM services WHERE is_active=1 ORDER BY sort_order LIMIT 6");
+$testimonials = db_all("SELECT * FROM testimonials WHERE is_active=1 ORDER BY sort_order");
+$blogs = db_all("SELECT * FROM blog_posts WHERE status='published' ORDER BY published_at DESC LIMIT 3");
+$heroImg = setting('hero_image', '/assets/img/hero-default.jpg');
+?>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__bg" style="background-image: url('<?= e($heroImg) ?>');"></div>
+    <div class="hero__vertical">EST. 2014 · KATHMANDU</div>
+    <div class="container hero__inner">
+      <div class="eyebrow">Construction · Real Estate · Development</div>
+      <h1 class="hero__title" data-split-words><?= e(setting('hero_headline','Building Tomorrow, Today')) ?></h1>
+      <p class="hero__sub reveal"><?= e(setting('hero_subheadline')) ?></p>
+      <div class="hero__ctas reveal">
+        <a href="/projects" class="btn btn-primary">View Our Projects</a>
+        <a href="/contact" class="btn btn-ghost">Free Consultation</a>
+      </div>
+    </div>
+    <a href="#stats" class="hero__scroll" aria-label="Scroll down">Scroll</a>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-bar" id="stats">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat">
+          <div class="stat__num"><span data-count="<?= (int)setting('stat_years',10) ?>">0</span><span class="stat__plus">+</span></div>
+          <div class="stat__label">Years of Experience</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num"><span data-count="<?= (int)setting('stat_projects',50) ?>">0</span><span class="stat__plus">+</span></div>
+          <div class="stat__label">Projects Completed</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num"><span data-count="<?= (int)setting('stat_clients',200) ?>">0</span><span class="stat__plus">+</span></div>
+          <div class="stat__label">Happy Clients</div>
+        </div>
+        <div class="stat">
+          <div class="stat__num"><span data-count="<?= (int)setting('stat_team',80) ?>">0</span><span class="stat__plus">+</span></div>
+          <div class="stat__label">Expert Team</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT SNAPSHOT -->
+  <section class="section section--cream">
+    <div class="container split">
+      <div class="split__media reveal bg-placeholder">
+        
+        <div style="position:absolute; bottom:1.5rem; left:1.5rem; right:1.5rem; color:var(--color-text-muted); font-size:.75rem; letter-spacing:.2em; text-transform:uppercase;">[ Architectural render placeholder ]</div>
+      </div>
+      <div>
+        <div class="eyebrow reveal">Our Story</div>
+        <h2 class="display display-lg reveal" style="margin:1.25rem 0 1.5rem;">Engineered for permanence. <span class="italic-accent">Designed for life.</span></h2>
+        <p class="reveal" style="margin-bottom:1.25rem;"><?= e(setting('about_snapshot')) ?></p>
+        <a href="/about" class="btn-text reveal">Our Story</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="section section--surface">
+    <div class="container">
+      <div style="text-align:center; max-width:640px; margin:0 auto;">
+        <div class="eyebrow reveal">What We Do</div>
+        <h2 class="display display-lg reveal" style="margin-top:1rem;">A complete construction practice</h2>
+        <p class="lede reveal" style="margin: 1.25rem auto 0;">From bespoke residences to commercial towers — engineering, design, and delivery under one roof.</p>
+      </div>
+      <div class="cards-grid">
+        <?php foreach ($services as $s): ?>
+        <a href="/services/<?= e($s['slug']) ?>" class="service-card reveal">
+          <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 21V9l9-6 9 6v12h-6v-7h-6v7H3z"/></svg>
+          <h3 class="service-card__title"><?= e($s['title']) ?></h3>
+          <p class="service-card__desc"><?= e($s['description']) ?></p>
+        </a>
+        <?php endforeach; ?>
+      </div>
+      <div style="text-align:center; margin-top:3rem;"><a href="/services" class="btn-text">Explore All Services</a></div>
+    </div>
+  </section>
+
+  <!-- FEATURED PROJECTS -->
+  <section class="section section--cream">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <div class="eyebrow reveal">Selected Work</div>
+          <h2 class="display display-lg reveal" style="margin-top:1rem;">Featured projects</h2>
+        </div>
+        <a href="/projects" class="btn-text reveal">All Projects</a>
+      </div>
+
+      <div data-filter-group>
+        <div class="filter-tabs reveal">
+          <button class="filter-tab is-active" data-cat="all">All</button>
+          <button class="filter-tab" data-cat="Residential">Residential</button>
+          <button class="filter-tab" data-cat="Commercial">Commercial</button>
+          <button class="filter-tab" data-cat="Mixed-Use">Mixed-Use</button>
+        </div>
+
+        <div class="projects-grid">
+          <?php foreach ($projects as $p): ?>
+          <a href="/projects/<?= e($p['slug']) ?>" class="project-card reveal" data-cat="<?= e($p['type']) ?>">
+            <div class="project-card__img" style="background-image: linear-gradient(135deg, rgba(20,18,14,0.35), rgba(20,18,14,0.7)), url('<?= e($p['hero_image']) ?>');"></div>
+            <span class="project-card__badge project-card__badge--<?= strtolower($p['status']) ?>"><?= e($p['status']) ?></span>
+            <div class="project-card__overlay">
+              <div class="project-card__type"><?= e($p['type']) ?></div>
+              <div class="project-card__title"><?= e($p['title']) ?></div>
+              <div class="project-card__location"><?= e($p['location']) ?></div>
+            </div>
+          </a>
+          <?php endforeach; ?>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY CHOOSE US -->
+  <section class="section section--surface">
+    <div class="container">
+      <div style="text-align:center; max-width:640px; margin:0 auto;">
+        <div class="eyebrow reveal">Why Alpha Concern</div>
+        <h2 class="display display-lg reveal" style="margin-top:1rem;">Six reasons clients trust us</h2>
+      </div>
+      <div class="why-grid">
+        <?php $items = [
+          ['Decade of Delivery','Over ten years executing residential, commercial, and mixed-use projects across the Kathmandu Valley.'],
+          ['Engineering Rigour','Every structure designed for NBC 105 seismic resilience with verified peer review.'],
+          ['Architectural Restraint','We design for longevity — finishes and lines that age with grace, not trend.'],
+          ['Transparent Process','Documented schedules, monthly client reporting, and full cost visibility throughout.'],
+          ['In-house Trades','Core trades retained internally for tighter quality control and on-time handover.'],
+          ['Post-Handover Care','24-month workmanship warranty with responsive maintenance support.'],
+        ];
+        foreach ($items as $i => $it): ?>
+        <div class="why-item reveal">
+          <div class="why-item__num"><?= str_pad($i+1, 2, '0', STR_PAD_LEFT) ?></div>
+          <h3 class="why-item__title"><?= e($it[0]) ?></h3>
+          <p class="why-item__desc"><?= e($it[1]) ?></p>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <?php if ($testimonials): ?>
+  <section class="section section--cream">
+    <div class="container-md" data-testimonials>
+      <div style="text-align:center; margin-bottom:3rem;">
+        <div class="eyebrow reveal">In Their Words</div>
+      </div>
+      <?php foreach ($testimonials as $t): ?>
+      <div class="testimonial reveal">
+        <span class="testimonial__mark">"</span>
+        <p class="testimonial__text"><?= e($t['review_text']) ?></p>
+        <div class="testimonial__name"><?= e($t['client_name']) ?></div>
+        <?php if ($t['project_name']): ?><div class="testimonial__project"><?= e($t['project_name']) ?></div><?php endif; ?>
+      </div>
+      <?php endforeach; ?>
+      <div class="testimonial-controls">
+        <button data-prev aria-label="Previous testimonial">←</button>
+        <button data-next aria-label="Next testimonial">→</button>
+      </div>
+    </div>
+  </section>
+  <?php endif; ?>
+
+  <!-- CTA BANNER -->
+  <section class="cta-banner">
+    <div class="cta-banner__bg"></div>
+    <div class="container cta-banner__inner">
+      <div class="eyebrow reveal" style="justify-content:center; display:inline-flex;">Let's Build Together</div>
+      <h2 class="display display-xl reveal" style="margin: 1.5rem auto; max-width: 16ch;">Ready to build your <span class="italic-accent">dream</span>?</h2>
+      <a href="/contact" class="btn btn-primary reveal">Let's Talk</a>
+    </div>
+  </section>
+
+  <!-- BLOG PREVIEW -->
+  <?php if ($blogs): ?>
+  <section class="section section--surface">
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:1rem; margin-bottom:3rem;">
+        <div>
+          <div class="eyebrow reveal">Insights & News</div>
+          <h2 class="display display-lg reveal" style="margin-top:1rem;">From the field</h2>
+        </div>
+        <a href="/blog" class="btn-text reveal">Read All Articles</a>
+      </div>
+      <div class="cards-grid" style="margin-top:0;">
+        <?php foreach ($blogs as $b): ?>
+        <a href="/blog/<?= e($b['slug']) ?>" class="service-card reveal" style="aspect-ratio: 4/5; display:flex; flex-direction:column; justify-content:flex-end;">
+          <div class="eyebrow" style="margin-bottom:1rem;"><?= e($b['category'] ?: 'Insight') ?></div>
+          <h3 class="service-card__title" style="font-family:var(--font-display); font-weight:400; font-size:1.5rem; line-height:1.2;"><?= e($b['title']) ?></h3>
+          <div style="margin-top:1rem; font-size:.75rem; color:var(--color-text-muted); letter-spacing:.15em; text-transform:uppercase;">
+            <?= fmt_date($b['published_at']) ?> · <?= read_time($b['body']) ?> min read
+          </div>
+        </a>
+        <?php endforeach; ?>
+      </div>
+    </div>
+  </section>
+  <?php endif; ?>
+
+</main>
+
+<?php partial('footer'); ?>

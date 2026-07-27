@@ -1,0 +1,2 @@
+# Defense-in-depth — CV storage should already be OUTSIDE web root.
+Require all denied

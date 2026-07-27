@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------------------
+# Dependencies / build output
+# ---------------------------------------------------------------------------
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+
+# Generated at build time by scripts/generate-frame-manifest.mjs
+scroll-sequence-next/public/frames/manifest.json
+
+# ---------------------------------------------------------------------------
+# Runtime data — never commit
+# ---------------------------------------------------------------------------
+# Job applicants' CVs. Personal data; stored outside the web root in production.
+Alpha Concerns/cvs/*
+!Alpha Concerns/cvs/.gitkeep
+!Alpha Concerns/cvs/.htaccess
+
+# Media uploaded through the admin panel belongs to the host, not the repo.
+Alpha Concerns/public_html/uploads/**/*
+!Alpha Concerns/public_html/uploads/**/.htaccess
+!Alpha Concerns/public_html/uploads/.htaccess
+
+# ---------------------------------------------------------------------------
+# Local environment
+# ---------------------------------------------------------------------------
+.env
+.env.*.local
+*.local.php
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+.idea/
+.vscode/
