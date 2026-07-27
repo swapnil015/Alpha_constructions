@@ -9,9 +9,12 @@ $team = db_all("SELECT * FROM team_members WHERE is_active=1 ORDER BY sort_order
 $page_scripts = '<script src="' . asset('assets/js/about.js') . '" defer></script>';
 ?>
 <main id="main" data-about>
-  <section class="hero" style="min-height: 70vh;">
-    <div class="hero__bg"></div>
-    <div class="container hero__inner" data-about-hero>
+  <section class="hero hero--shot ab-hero">
+    <img class="hero--shot__img" src="<?= asset('assets/img/hero/about-skyline.jpg') ?>"
+         alt="Four colleagues reviewing drawings on a rooftop terrace at sunset, with the Kathmandu skyline and the Himalaya beyond."
+         width="1672" height="941" fetchpriority="high" decoding="async">
+    <span class="hero--shot__scrim" aria-hidden="true"></span>
+    <div class="container hero__inner hero--shot__inner" data-about-hero>
       <div class="eyebrow">About Alpha Concern</div>
       <h1 class="hero__title" data-about-hero-title>Who We Are</h1>
       <p class="hero__sub" data-about-hero-sub>A construction and real-estate development practice founded on engineering rigour and architectural restraint.</p>

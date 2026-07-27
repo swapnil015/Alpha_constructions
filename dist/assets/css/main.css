@@ -3024,6 +3024,15 @@ main > section + section { border-top: 1px solid rgba(200, 146, 42, .12); }
   }
 }
 
+/* About: the terrace photograph is already close to the hero's own aspect, so
+   it sits almost uncropped on desktop. Its left third is a dark wash, which
+   is where the copy goes — the standard scrim is enough. */
+.ab-hero .hero--shot__img { object-position: 50% 50%; }
+@media (max-width: 760px) {
+  /* Portrait crops out the valley; follow the group and the tower instead. */
+  .ab-hero .hero--shot__img { object-position: 85% 58%; }
+}
+
 /* The Insights photograph carries the crane arm across the top third and the
    two engineers on the slab near the bottom. Centring the crop loses one or
    the other, so hold it slightly below centre to keep both in frame. */
