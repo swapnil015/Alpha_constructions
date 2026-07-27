@@ -13,7 +13,8 @@ $page_scripts =
     '<script src="' . asset('assets/js/sequence.js') . '" defer></script>' .
     '<script src="' . asset('assets/js/story.js')    . '" defer></script>' .
     '<script src="' . asset('assets/js/services.js') . '" defer></script>' .
-    '<script src="' . asset('assets/js/projects.js') . '" defer></script>';
+    '<script src="' . asset('assets/js/projects.js') . '" defer></script>' .
+    '<script src="' . asset('assets/js/why.js')      . '" defer></script>';
 ?>
 
 <main id="main">
@@ -419,30 +420,65 @@ $page_scripts =
     <a class="cp__all" href="/projects">All Projects</a>
   </section>
 
-  <!-- WHY CHOOSE US -->
-  <section class="section section--surface">
-    <div class="container">
-      <div style="text-align:center; max-width:640px; margin:0 auto;">
-        <div class="eyebrow reveal">Why Alpha Concern</div>
-        <h2 class="display display-lg reveal" style="margin-top:1rem;">Six reasons clients trust us</h2>
-      </div>
-      <div class="why-grid">
-        <?php $items = [
-          ['Decade of Delivery','Over ten years executing residential, commercial, and mixed-use projects across the Kathmandu Valley.'],
-          ['Engineering Rigour','Every structure designed for NBC 105 seismic resilience with verified peer review.'],
-          ['Architectural Restraint','We design for longevity — finishes and lines that age with grace, not trend.'],
-          ['Transparent Process','Documented schedules, monthly client reporting, and full cost visibility throughout.'],
-          ['In-house Trades','Core trades retained internally for tighter quality control and on-time handover.'],
-          ['Post-Handover Care','24-month workmanship warranty with responsive maintenance support.'],
-        ];
-        foreach ($items as $i => $it): ?>
-        <div class="why-item reveal">
-          <div class="why-item__num"><?= str_pad($i+1, 2, '0', STR_PAD_LEFT) ?></div>
-          <h3 class="why-item__title"><?= e($it[0]) ?></h3>
-          <p class="why-item__desc"><?= e($it[1]) ?></p>
-        </div>
+  <!-- ==========================================================================
+       WHY ALPHA CONCERN — staggered glass timeline (assets/js/why.js)
+       Six cards alternating left/right along a gold line that draws itself as
+       the section is scrolled, with a dot travelling ahead of the fill.
+       ========================================================================== -->
+  <?php
+  // Outline icons, drawn at the same hairline weight as the rest of the page.
+  $whyIcons = [
+      'tower'     => '<path d="M7 21V6l5-3 5 3v15"/><path d="M4 21h16"/><path d="M10 9h4M10 13h4M10 17h4"/>',
+      'blueprint' => '<path d="M3 5h18v14H3z"/><path d="M3 10h6v9H3z"/><path d="M13 5v5h8"/>',
+      'compass'   => '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5.5-5.5 2 2-5.5z"/>',
+      'handshake' => '<path d="m11 17 2 2 3-3 3 3 2-2-5-5-3 3"/><path d="M13 8 9.5 4.5 3 11l3 3 3-3"/>',
+      'tools'     => '<path d="M14.5 5.5a3.5 3.5 0 0 0 4.6 4.6L21 12l-9 9-3-3 9-9z"/><path d="m6 6 3 3"/><path d="M3 9 9 3"/>',
+      'shield'    => '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="m9 12 2 2 4-4"/>',
+  ];
+
+  $whyItems = [
+      ['tower',     'Decade of Delivery',      'Over ten years executing residential, commercial, and mixed-use projects across the Kathmandu Valley.'],
+      ['blueprint', 'Engineering Rigour',      'Every structure designed for NBC 105 seismic resilience with verified peer review.'],
+      ['compass',   'Architectural Restraint', 'We design for longevity — finishes and lines that age with grace, not trend.'],
+      ['handshake', 'Transparent Process',     'Documented schedules, monthly client reporting, and full cost visibility throughout.'],
+      ['tools',     'In-house Trades',         'Core trades retained internally for tighter quality control and on-time handover.'],
+      ['shield',    'Post-Handover Care',      '24-month workmanship warranty with responsive maintenance support.'],
+  ];
+  ?>
+  <section class="why" data-why aria-label="Why Alpha Concern">
+
+    <div class="why__bg" aria-hidden="true">
+      <span class="why__blueprint"></span>
+      <span class="why__glow"></span>
+    </div>
+
+    <header class="why__head">
+      <div class="why__eyebrow">Why Alpha Concern</div>
+      <h2 class="why__title" data-why-title>Why Clients Choose Alpha Concern</h2>
+      <p class="why__statement">Built on precision, trusted through execution.</p>
+    </header>
+
+    <div class="why__timeline">
+      <span class="why__line" aria-hidden="true"><span class="why__lineFill" data-why-line></span></span>
+      <span class="why__dot" data-why-dot aria-hidden="true"></span>
+
+      <ol class="why__list">
+        <?php foreach ($whyItems as $i => $it): ?>
+        <li class="why__row why__row--<?= $i % 2 === 0 ? 'left' : 'right' ?>" data-why-row="<?= $i ?>">
+          <span class="why__node" aria-hidden="true"></span>
+          <span class="why__num" aria-hidden="true"><?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></span>
+
+          <article class="why__card" data-why-card>
+            <svg class="why__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <?= $whyIcons[$it[0]] ?>
+            </svg>
+            <h3 class="why__cardTitle"><?= e($it[1]) ?></h3>
+            <p class="why__cardDesc"><?= e($it[2]) ?></p>
+          </article>
+        </li>
         <?php endforeach; ?>
-      </div>
+      </ol>
     </div>
   </section>
 

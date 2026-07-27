@@ -27,7 +27,7 @@
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="/assets/css/main.css?v=1785138420">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1785139129">
 
   <!-- Structured Data: LocalBusiness -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ConstructionCompany","name":"Alpha Concern Pvt. Ltd.","url":"https://alpha-constructions.vercel.app","logo":"https://alpha-constructions.vercel.app/assets/img/logo.jpg","image":"https://alpha-constructions.vercel.app/assets/img/logo.jpg","address":{"@type":"PostalAddress","streetAddress":"Maharajgunj 4","addressLocality":"Kathmandu","addressRegion":"Bagmati","addressCountry":"NP"},"telephone":"+977-1-4515467","email":"alpha.concern@gmail.com","description":"Premium construction and real estate development based in Maharajgunj, Kathmandu — building residences and commercial spaces engineered to endure.","openingHours":"Su-Fr 10:00-18:00","sameAs":[]}</script>
@@ -705,45 +705,102 @@
     <a class="cp__all" href="/projects">All Projects</a>
   </section>
 
-  <!-- WHY CHOOSE US -->
-  <section class="section section--surface">
-    <div class="container">
-      <div style="text-align:center; max-width:640px; margin:0 auto;">
-        <div class="eyebrow reveal">Why Alpha Concern</div>
-        <h2 class="display display-lg reveal" style="margin-top:1rem;">Six reasons clients trust us</h2>
-      </div>
-      <div class="why-grid">
-                <div class="why-item reveal">
-          <div class="why-item__num">01</div>
-          <h3 class="why-item__title">Decade of Delivery</h3>
-          <p class="why-item__desc">Over ten years executing residential, commercial, and mixed-use projects across the Kathmandu Valley.</p>
-        </div>
-                <div class="why-item reveal">
-          <div class="why-item__num">02</div>
-          <h3 class="why-item__title">Engineering Rigour</h3>
-          <p class="why-item__desc">Every structure designed for NBC 105 seismic resilience with verified peer review.</p>
-        </div>
-                <div class="why-item reveal">
-          <div class="why-item__num">03</div>
-          <h3 class="why-item__title">Architectural Restraint</h3>
-          <p class="why-item__desc">We design for longevity — finishes and lines that age with grace, not trend.</p>
-        </div>
-                <div class="why-item reveal">
-          <div class="why-item__num">04</div>
-          <h3 class="why-item__title">Transparent Process</h3>
-          <p class="why-item__desc">Documented schedules, monthly client reporting, and full cost visibility throughout.</p>
-        </div>
-                <div class="why-item reveal">
-          <div class="why-item__num">05</div>
-          <h3 class="why-item__title">In-house Trades</h3>
-          <p class="why-item__desc">Core trades retained internally for tighter quality control and on-time handover.</p>
-        </div>
-                <div class="why-item reveal">
-          <div class="why-item__num">06</div>
-          <h3 class="why-item__title">Post-Handover Care</h3>
-          <p class="why-item__desc">24-month workmanship warranty with responsive maintenance support.</p>
-        </div>
-              </div>
+  <!-- ==========================================================================
+       WHY ALPHA CONCERN — staggered glass timeline (assets/js/why.js)
+       Six cards alternating left/right along a gold line that draws itself as
+       the section is scrolled, with a dot travelling ahead of the fill.
+       ========================================================================== -->
+    <section class="why" data-why aria-label="Why Alpha Concern">
+
+    <div class="why__bg" aria-hidden="true">
+      <span class="why__blueprint"></span>
+      <span class="why__glow"></span>
+    </div>
+
+    <header class="why__head">
+      <div class="why__eyebrow">Why Alpha Concern</div>
+      <h2 class="why__title" data-why-title>Why Clients Choose Alpha Concern</h2>
+      <p class="why__statement">Built on precision, trusted through execution.</p>
+    </header>
+
+    <div class="why__timeline">
+      <span class="why__line" aria-hidden="true"><span class="why__lineFill" data-why-line></span></span>
+      <span class="why__dot" data-why-dot aria-hidden="true"></span>
+
+      <ol class="why__list">
+                <li class="why__row why__row--left" data-why-row="0">
+          <span class="why__node" aria-hidden="true"></span>
+          <span class="why__num" aria-hidden="true">01</span>
+
+          <article class="why__card" data-why-card>
+            <svg class="why__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 21V6l5-3 5 3v15"/><path d="M4 21h16"/><path d="M10 9h4M10 13h4M10 17h4"/>            </svg>
+            <h3 class="why__cardTitle">Decade of Delivery</h3>
+            <p class="why__cardDesc">Over ten years executing residential, commercial, and mixed-use projects across the Kathmandu Valley.</p>
+          </article>
+        </li>
+                <li class="why__row why__row--right" data-why-row="1">
+          <span class="why__node" aria-hidden="true"></span>
+          <span class="why__num" aria-hidden="true">02</span>
+
+          <article class="why__card" data-why-card>
+            <svg class="why__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 5h18v14H3z"/><path d="M3 10h6v9H3z"/><path d="M13 5v5h8"/>            </svg>
+            <h3 class="why__cardTitle">Engineering Rigour</h3>
+            <p class="why__cardDesc">Every structure designed for NBC 105 seismic resilience with verified peer review.</p>
+          </article>
+        </li>
+                <li class="why__row why__row--left" data-why-row="2">
+          <span class="why__node" aria-hidden="true"></span>
+          <span class="why__num" aria-hidden="true">03</span>
+
+          <article class="why__card" data-why-card>
+            <svg class="why__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5.5-5.5 2 2-5.5z"/>            </svg>
+            <h3 class="why__cardTitle">Architectural Restraint</h3>
+            <p class="why__cardDesc">We design for longevity — finishes and lines that age with grace, not trend.</p>
+          </article>
+        </li>
+                <li class="why__row why__row--right" data-why-row="3">
+          <span class="why__node" aria-hidden="true"></span>
+          <span class="why__num" aria-hidden="true">04</span>
+
+          <article class="why__card" data-why-card>
+            <svg class="why__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m11 17 2 2 3-3 3 3 2-2-5-5-3 3"/><path d="M13 8 9.5 4.5 3 11l3 3 3-3"/>            </svg>
+            <h3 class="why__cardTitle">Transparent Process</h3>
+            <p class="why__cardDesc">Documented schedules, monthly client reporting, and full cost visibility throughout.</p>
+          </article>
+        </li>
+                <li class="why__row why__row--left" data-why-row="4">
+          <span class="why__node" aria-hidden="true"></span>
+          <span class="why__num" aria-hidden="true">05</span>
+
+          <article class="why__card" data-why-card>
+            <svg class="why__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14.5 5.5a3.5 3.5 0 0 0 4.6 4.6L21 12l-9 9-3-3 9-9z"/><path d="m6 6 3 3"/><path d="M3 9 9 3"/>            </svg>
+            <h3 class="why__cardTitle">In-house Trades</h3>
+            <p class="why__cardDesc">Core trades retained internally for tighter quality control and on-time handover.</p>
+          </article>
+        </li>
+                <li class="why__row why__row--right" data-why-row="5">
+          <span class="why__node" aria-hidden="true"></span>
+          <span class="why__num" aria-hidden="true">06</span>
+
+          <article class="why__card" data-why-card>
+            <svg class="why__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="m9 12 2 2 4-4"/>            </svg>
+            <h3 class="why__cardTitle">Post-Handover Care</h3>
+            <p class="why__cardDesc">24-month workmanship warranty with responsive maintenance support.</p>
+          </article>
+        </li>
+              </ol>
     </div>
   </section>
 
@@ -896,5 +953,5 @@
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js" defer></script>
 <script src="/assets/js/main.js?v=1785048953"></script>
-<script src="/assets/js/sequence.js?v=1785126876" defer></script><script src="/assets/js/story.js?v=1785059605" defer></script><script src="/assets/js/services.js?v=1785135236" defer></script><script src="/assets/js/projects.js?v=1785136596" defer></script></body>
+<script src="/assets/js/sequence.js?v=1785126876" defer></script><script src="/assets/js/story.js?v=1785059605" defer></script><script src="/assets/js/services.js?v=1785135236" defer></script><script src="/assets/js/projects.js?v=1785136596" defer></script><script src="/assets/js/why.js?v=1785139074" defer></script></body>
 </html>
