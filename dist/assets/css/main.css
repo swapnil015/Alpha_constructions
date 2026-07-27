@@ -2990,3 +2990,36 @@ main > section + section { border-top: 1px solid rgba(200, 146, 42, .12); }
   .wy-quote:hover::after { animation: none; }
   .cta-banner .btn.is-pulse { animation: none; }
 }
+
+/* -- Why Us hero over photography ------------------------------------------
+   The generic .hero--shot scrim clears to the right so the picture reads as
+   the subject. This hero puts the credibility stats in that right-hand
+   column, and they would sit over the brightest part of the building. A
+   heavier, more even scrim keeps both columns legible while still showing
+   the sunset and the valley. */
+.wy-hero.hero--shot { min-height: 80vh; }
+
+.wy-hero .hero--shot__scrim {
+  background:
+    linear-gradient(to right,
+      rgba(0, 30, 30, .93) 0%, rgba(0, 30, 30, .72) 34%,
+      rgba(0, 30, 30, .58) 64%, rgba(0, 30, 30, .62) 100%),
+    linear-gradient(to bottom,
+      rgba(0, 24, 24, .55) 0%, rgba(0, 24, 24, 0) 26%,
+      rgba(0, 24, 24, 0) 62%, rgba(0, 24, 24, .60) 100%);
+}
+
+/* The stat rules need to read against a photograph, not a flat panel. */
+.wy-hero .wy-stat { border-left-color: rgba(200, 146, 42, .45); }
+.wy-hero .wy-stat__num   { text-shadow: 0 2px 24px rgba(0, 20, 20, .75); }
+.wy-hero .wy-stat__label { color: rgba(244, 239, 227, .72); text-shadow: 0 1px 16px rgba(0, 20, 20, .8); }
+
+@media (max-width: 900px) {
+  /* Stacked, the stats sit lower over the building; deepen the base. */
+  .wy-hero .hero--shot__scrim {
+    background:
+      linear-gradient(to bottom,
+        rgba(0, 24, 24, .60) 0%, rgba(0, 24, 24, .30) 24%,
+        rgba(0, 24, 24, .62) 60%, rgba(0, 24, 24, .88) 100%);
+  }
+}

@@ -50,9 +50,14 @@ $reasons = [
   <!-- ==========================================================================
        HERO — two deliberate lines, credibility stats filling the right half
        ========================================================================== -->
-  <section class="hero wy-hero">
-    <div class="hero__bg"></div>
-    <div class="container hero__inner">
+  <section class="hero wy-hero hero--shot">
+    <img class="hero--shot__img"
+         src="<?= asset('assets/img/hero/why-us-building.jpg') ?>"
+         alt="A glazed commercial building at sunset, with the Kathmandu valley and mountains beyond."
+         width="1672" height="941" fetchpriority="high" decoding="async">
+    <span class="hero--shot__scrim" aria-hidden="true"></span>
+
+    <div class="container hero__inner hero--shot__inner">
       <div class="wy-hero__grid">
         <div data-wy-heroblock>
           <div class="eyebrow">Why Choose Us</div>
