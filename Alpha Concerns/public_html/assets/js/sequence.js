@@ -26,7 +26,8 @@
   'use strict';
 
   var CONFIG = {
-    manifestUrl: '/api/frames.php',
+    manifestUrl:         '/api/frames.php',
+    manifestFallbackUrl: '/api/frames.json',   // static export (no PHP runtime)
 
     pxPerFrame:  15,     // scroll travel per frame; higher = slower scrub
     minTravelVh: 2.6,
@@ -82,13 +83,25 @@
   var srcW = 0;
   var srcH = 0;
 
+  /**
+   * Resolve the frame list.
+   *
+   * Tries the PHP endpoint first (authoritative — it reads the directory, so a
+   * re-exported sequence needs no code change), then a static JSON fallback.
+   * The fallback is what makes the static export work on hosts that cannot run
+   * PHP, such as the Vercel preview build.
+   */
   function discover() {
-    return fetch(CONFIG.manifestUrl, { cache: 'default' })
-      .then(function (r) { if (!r.ok) throw new Error('manifest ' + r.status); return r.json(); })
-      .then(function (d) {
-        if (!d || !d.frames || !d.frames.length) throw new Error('empty manifest');
-        return d.frames;
-      })
+    function attempt(url) {
+      return fetch(url, { cache: 'default' })
+        .then(function (r) { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); })
+        .then(function (d) {
+          if (!d || !d.frames || !d.frames.length) throw new Error('empty manifest');
+          return d.frames;
+        });
+    }
+    return attempt(CONFIG.manifestUrl)
+      .catch(function () { return attempt(CONFIG.manifestFallbackUrl); })
       .catch(function () { return []; });
   }
 
