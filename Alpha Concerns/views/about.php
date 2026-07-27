@@ -70,10 +70,16 @@ $page_scripts = '<script src="' . asset('assets/js/about.js') . '" defer></scrip
       <div class="cards-grid" data-about-cards>
         <?php foreach ($team as $m): ?>
         <div class="service-card is-traced is-person">
-          <div class="bg-placeholder person__media" style="aspect-ratio:1; margin-bottom:1.5rem;"><span class="person__img"></span></div>
+          <div class="person__media<?= $m['photo'] ? '' : ' bg-placeholder' ?>" style="aspect-ratio:1; margin-bottom:1.5rem;">
+            <?php if ($m['photo']): ?>
+            <img class="person__img" src="<?= e($m['photo']) ?>"
+                 alt="<?= e($m['name']) ?>, <?= e($m['title']) ?>"
+                 loading="lazy" decoding="async" width="600" height="600">
+            <?php else: ?><span class="person__img"></span><?php endif; ?>
+          </div>
           <div class="eyebrow person__role" style="margin-bottom:.5rem;"><?= e($m['title']) ?></div>
           <h3 class="service-card__title person__name"><?= e($m['name']) ?></h3>
-          <p class="service-card__desc"><?= e($m['bio']) ?></p>
+          <?php if ($m['bio']): ?><p class="service-card__desc"><?= e($m['bio']) ?></p><?php endif; ?>
         </div>
         <?php endforeach; ?>
       </div>

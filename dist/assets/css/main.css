@@ -2381,3 +2381,14 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   .about-process__rail > span { transform: scaleY(1); }
   .stats-grid .stat + .stat::before { transform: scaleY(1); }
 }
+
+/* -- Team portraits ---------------------------------------------------------
+   The card's hover scale needs a clipping frame at every width, not only
+   where hover applies. */
+.person__media { position: relative; overflow: hidden; }
+.person__media .person__img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
