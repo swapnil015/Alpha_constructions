@@ -23,7 +23,13 @@ $page_scripts = '<script src="' . asset('assets/js/about.js') . '" defer></scrip
 
   <section class="section section--cream">
     <div class="container split">
-      <div class="split__media bg-placeholder" data-about-media><span class="split__media-inner"></span></div>
+      <div class="split__media split__media--wide" data-about-media>
+        <span class="split__media-inner">
+          <img src="<?= asset('assets/img/about/story-skyline.jpg') ?>"
+               alt="Two engineers with drawings above an Alpha Concern site at sunrise — towers under construction, a completed residential block, and the Himalaya beyond."
+               width="1535" height="1025" loading="lazy" decoding="async">
+        </span>
+      </div>
       <div data-about-story-copy>
         <div class="eyebrow">Our Story</div>
         <h2 class="display display-lg" data-about-story-title style="margin:1rem 0 1.5rem;">A decade of building <span class="italic-accent">that endures</span></h2>

@@ -2250,6 +2250,12 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   .floater-top:hover { transform: scale(1) translateY(-3px); }
 }
 
+/* The Our Story plate is a 3:2 landscape — the engineers sit hard left and the
+   finished tower hard right, so the default 4/5 portrait crop would cut both.
+   Match the photograph's own aspect and show all of it. */
+.split__media--wide { aspect-ratio: 3 / 2; }
+@media (max-width: 900px) { .split__media--wide { aspect-ratio: 4 / 3; } }
+
 /* -- Our Story: gold frame that draws itself around the panel -------------- */
 .split__media { position: relative; }
 .split__media-inner { position: absolute; inset: 0; display: block; }
