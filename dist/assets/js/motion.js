@@ -33,7 +33,16 @@ window.Motion = (function () {
     // Reveals fire once, when the element is ~20% into the viewport.
     start:     'top 80%',
     // Section labels contract from this to their authored tracking.
-    labelTracking: '0.35em'
+    labelTracking: '0.35em',
+
+    // -- Reveal engine ------------------------------------------------------
+    // Every knob for the declarative [data-reveal] system lives here.
+    reveal: {
+      threshold:      0.2,      // ~20% into the viewport
+      rootMargin:     '0px 0px -12% 0px',
+      staggerStep:    0.1,      // .reveal--stagger increment, seconds
+      failsafeMs:     4000      // never leave content invisible (see initReveals)
+    }
   };
 
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -301,8 +310,80 @@ window.Motion = (function () {
       .forEach(function (el) { maskedText(el); });
   }
 
+  /**
+   * Declarative reveal engine.
+   *
+   * Replaces the per-element GSAP tween that used to live in main.js: one
+   * IntersectionObserver for the whole page instead of one ScrollTrigger per
+   * element, and the motion itself expressed in CSS so variants are a data
+   * attribute rather than more JavaScript.
+   *
+   *   data-reveal="up|mask|wipe|blur|scale-x"   default "up"
+   *   data-reveal-delay="0.1"                   explicit delay, seconds
+   *   .reveal--stagger on a parent              auto 0.1s increment per child
+   */
+  function initReveals() {
+    var nodes = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    if (!nodes.length) return;
+
+    // Give every element its variant class up front so the resting state is
+    // correct before anything scrolls.
+    nodes.forEach(function (el) {
+      var v = el.getAttribute('data-reveal') || 'up';
+      el.classList.add('reveal--' + v);
+    });
+
+    // Parent-driven stagger, resolved once so children carry a real delay.
+    Array.prototype.slice.call(document.querySelectorAll('.reveal--stagger'))
+      .forEach(function (parent) {
+        Array.prototype.slice.call(parent.querySelectorAll('.reveal'))
+          .forEach(function (child, i) {
+            if (child.hasAttribute('data-reveal-delay')) return;
+            child.setAttribute('data-reveal-delay', (i * tokens.reveal.staggerStep).toFixed(2));
+          });
+      });
+
+    function show(el) {
+      var d = parseFloat(el.getAttribute('data-reveal-delay')) || 0;
+      if (d) el.style.transitionDelay = d + 's';
+      el.classList.add('is-revealed');
+    }
+
+    // Reduced motion, or no observer support: show everything at once and
+    // register nothing.
+    if (reduced || !('IntersectionObserver' in window)) {
+      nodes.forEach(function (el) { el.classList.add('is-revealed'); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        show(e.target);
+        io.unobserve(e.target);
+      });
+    }, { threshold: tokens.reveal.threshold, rootMargin: tokens.reveal.rootMargin });
+
+    nodes.forEach(function (el) { io.observe(el); });
+
+    /*
+     * Failsafe. IntersectionObserver only runs during a rendering opportunity,
+     * so it does not fire in a background tab. A reveal that silently fails
+     * leaves the page blank, which is far worse than losing the animation.
+     */
+    function revealAll() {
+      nodes.forEach(function (el) { el.classList.add('is-revealed'); });
+      io.disconnect();
+    }
+    setTimeout(revealAll, tokens.reveal.failsafeMs);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) setTimeout(revealAll, 1500);
+    });
+  }
+
   function initChrome() {
     initMasked();
+    initReveals();
     // -- Header: hide going down, return going up ---------------------------
     var header = document.querySelector('.site-header');
     if (header) {

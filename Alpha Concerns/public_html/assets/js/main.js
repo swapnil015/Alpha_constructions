@@ -163,13 +163,9 @@
   if (window.gsap && window.ScrollTrigger && !reduceMotion) {
     window.gsap.registerPlugin(window.ScrollTrigger);
 
-    document.querySelectorAll('.reveal').forEach((el) => {
-      window.gsap.to(el, {
-        opacity: 1, y: 0, duration: 1.0, ease: 'power3.out',
-        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-        onComplete: () => el.classList.add('is-revealed')
-      });
-    });
+    // .reveal is owned by motion.js — one IntersectionObserver for the page
+    // with declarative [data-reveal] variants, instead of one ScrollTrigger
+    // per element. Driving it from here as well would fight that.
 
     // Hero word reveal
     document.querySelectorAll('[data-split-words]').forEach((el) => {
