@@ -3024,6 +3024,15 @@ main > section + section { border-top: 1px solid rgba(200, 146, 42, .12); }
   }
 }
 
+/* The Insights photograph carries the crane arm across the top third and the
+   two engineers on the slab near the bottom. Centring the crop loses one or
+   the other, so hold it slightly below centre to keep both in frame. */
+.in-hero .hero--shot__img { object-position: 50% 50%; }
+@media (max-width: 900px) {
+  /* Portrait crops in hard; follow the subject to the right of frame. */
+  .in-hero .hero--shot__img { object-position: 72% 56%; }
+}
+
 /* ===========================================================================
    Insights / Careers / Contact
    Reuses the existing tokens, .reveal engine and .hero--shot pattern.

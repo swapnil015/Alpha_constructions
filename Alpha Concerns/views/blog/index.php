@@ -13,10 +13,10 @@ $cats  = db_all("SELECT DISTINCT category FROM blog_posts WHERE status='publishe
 $lead = $posts ? array_shift($posts) : null;
 ?>
 <main id="main">
-  <section class="hero hero--shot pg-hero">
-    <img class="hero--shot__img" src="<?= asset('assets/img/hero/projects-site.jpg') ?>"
-         alt="Engineers on site at sunset, with tower cranes over a rising structure."
-         width="1672" height="941" fetchpriority="high" decoding="async">
+  <section class="hero hero--shot pg-hero in-hero">
+    <img class="hero--shot__img" src="<?= asset('assets/img/hero/insights-skyline.jpg') ?>"
+         alt="Two engineers on the top slab of a rising concrete frame at sunset, a tower crane above and the valley beyond."
+         width="1681" height="935" fetchpriority="high" decoding="async">
     <span class="hero--shot__scrim" aria-hidden="true"></span>
     <div class="container hero__inner hero--shot__inner">
       <div class="eyebrow">Insights</div>
