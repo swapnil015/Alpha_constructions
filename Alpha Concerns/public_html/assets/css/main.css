@@ -2603,7 +2603,10 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 
 .hero--shot {
   position: relative;
-  min-height: min(72vh, 680px);
+  /* Fill what is left of the viewport under the topbar + sticky header
+     (measured at 114px on desktop; 7.5rem covers it across breakpoints).
+     A fixed 72vh cap left 138px of empty green under the photograph. */
+  min-height: calc(100svh - 7.5rem);
   padding: 0;
   display: flex;
   align-items: center;
@@ -2655,8 +2658,13 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   text-shadow: 0 1px 24px rgba(0, 20, 20, .6);
 }
 
+/* A section following a full-bleed hero does not need the standard opening
+   rhythm — the photograph has already done that work, and a full --section-y
+   reads as 144px of empty green. */
+.hero--shot + .section { padding-top: clamp(2.5rem, 5vw, 4rem); }
+
 @media (max-width: 760px) {
-  .hero--shot { min-height: 62vh; align-items: flex-end; }
+  .hero--shot { min-height: calc(100svh - 6rem); align-items: flex-end; }
   .hero--shot__img { object-position: 58% 42%; }
   /* Portrait crops in tight on the subject, so the copy needs a deeper base. */
   .hero--shot__scrim {
