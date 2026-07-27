@@ -5,12 +5,15 @@ $jobs    = db_all("SELECT * FROM job_listings WHERE is_active=1 ORDER BY created
 $flashes = flash_get();
 ?>
 <main id="main">
-  <section class="hero" style="min-height: 55vh;">
-    <div class="hero__bg"></div>
-    <div class="container hero__inner">
+  <section class="hero hero--shot pg-hero">
+    <img class="hero--shot__img" src="<?= asset('assets/img/hero/services-prajwal-residency.jpg') ?>"
+         alt="A reinforced concrete frame under construction above the Kathmandu valley."
+         width="1200" height="1600" fetchpriority="high" decoding="async">
+    <span class="hero--shot__scrim" aria-hidden="true"></span>
+    <div class="container hero__inner hero--shot__inner">
       <div class="eyebrow">Careers</div>
-      <h1 class="hero__title" data-split-words>Build with us</h1>
-      <p class="hero__sub reveal">We hire engineers, designers, and craftspeople who care about the long life of what they build.</p>
+      <h1 class="hero__title" data-masked>Build with us</h1>
+      <p class="hero__sub reveal" data-reveal="up">We hire engineers, designers, and craftspeople who care about the long life of what they build.</p>
     </div>
   </section>
 
@@ -19,20 +22,46 @@ $flashes = flash_get();
       <?php foreach (($flashes['success'] ?? []) as $m): ?><div class="form-success"><?= e($m) ?></div><?php endforeach; ?>
       <?php foreach (($flashes['error'] ?? []) as $m): ?><div class="form-success" style="border-color:#E8835F;"><?= e($m) ?></div><?php endforeach; ?>
 
-      <h2 class="display display-lg reveal" style="margin-bottom:3rem;">Open positions</h2>
+      <div class="cr-intro" style="margin-bottom: clamp(2.5rem, 6vh, 4rem);">
+        <div>
+          <div class="eyebrow reveal" data-reveal="up">Working Here</div>
+          <h2 class="display display-lg reveal" data-reveal="mask" style="margin-top:1rem;"><span>Open positions</span></h2>
+        </div>
+        <div class="cr-values reveal--stagger">
+          <div class="cr-value reveal" data-reveal="up">
+            <span class="cr-value__k">01</span>
+            <p class="cr-value__v">Core trades are retained in house, so the people who build our projects are our own.</p>
+          </div>
+          <div class="cr-value reveal" data-reveal="up">
+            <span class="cr-value__k">02</span>
+            <p class="cr-value__v">Every structure is designed to NBC 105 and put through independent peer review.</p>
+          </div>
+          <div class="cr-value reveal" data-reveal="up">
+            <span class="cr-value__k">03</span>
+            <p class="cr-value__v">Work spans residential, commercial and institutional projects across the valley.</p>
+          </div>
+        </div>
+      </div>
 
       <?php if (!$jobs): ?>
-        <p>No open positions at the moment. We invite speculative applications at <a href="mailto:<?= e(setting('email_primary')) ?>" style="color:var(--color-accent);"><?= e(setting('email_primary')) ?></a>.</p>
+        <div class="cr-empty reveal" data-reveal="up">
+          <p style="margin:0 0 .75rem;">No open positions at the moment.</p>
+          <p style="margin:0;">We welcome speculative applications at
+            <a href="mailto:<?= e(setting('email_primary')) ?>" style="color:var(--color-accent);"><?= e(setting('email_primary')) ?></a>.
+          </p>
+        </div>
       <?php endif; ?>
 
+      <div class="reveal--stagger">
       <?php foreach ($jobs as $j): ?>
-      <div class="reveal" style="border:1px solid var(--color-border); margin-bottom:1rem; background:var(--color-surface);">
-        <button @click="open === <?= (int)$j['id'] ?> ? open = null : open = <?= (int)$j['id'] ?>" style="width:100%; padding:1.5rem 1.75rem; display:flex; justify-content:space-between; align-items:center; gap:1rem; text-align:left;">
+      <div class="cr-job reveal" data-reveal="up" :class="{ 'is-open': open === <?= (int)$j['id'] ?> }">
+        <button class="cr-job__btn" @click="open === <?= (int)$j['id'] ?> ? open = null : open = <?= (int)$j['id'] ?>"
+                :aria-expanded="open === <?= (int)$j['id'] ?>">
           <div>
             <div class="eyebrow" style="margin-bottom:.5rem;"><?= e($j['department']) ?> · <?= e($j['employment_type']) ?> · <?= e($j['location']) ?></div>
-            <h3 style="font-family:var(--font-display); font-weight:400; font-size:1.5rem; color:var(--color-text-primary);"><?= e($j['title']) ?></h3>
+            <h3 class="cr-job__title"><?= e($j['title']) ?></h3>
           </div>
-          <span style="color:var(--color-accent); font-size:1.5rem;" x-text="open === <?= (int)$j['id'] ?> ? '−' : '+'">+</span>
+          <span class="cr-job__sign" aria-hidden="true"></span>
         </button>
         <div x-show="open === <?= (int)$j['id'] ?>" x-collapse style="padding: 0 1.75rem 2rem;">
           <div style="border-top:1px solid var(--color-border); padding-top:1.5rem;">
@@ -52,12 +81,13 @@ $flashes = flash_get();
                 <div class="form-group"><label class="form-label">CV (PDF/DOC, max 5MB) *</label><input class="form-control" type="file" name="cv" accept=".pdf,.doc,.docx" required></div>
               </div>
               <div class="form-group"><label class="form-label">Cover Note</label><textarea class="form-control" name="cover_note" maxlength="2000"></textarea></div>
-              <button class="btn btn-primary" type="submit">Submit Application</button>
+              <button class="btn btn-primary is-magnetic" type="submit">Submit Application</button>
             </form>
           </div>
         </div>
       </div>
       <?php endforeach; ?>
+      </div>
     </div>
   </section>
 </main>

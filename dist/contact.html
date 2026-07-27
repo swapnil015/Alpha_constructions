@@ -27,7 +27,7 @@
   <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
 
   <!-- Styles -->
-  <link rel="stylesheet" href="/assets/css/main.css?v=1785169428">
+  <link rel="stylesheet" href="/assets/css/main.css?v=1785169758">
 
   <!-- Structured Data: LocalBusiness -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ConstructionCompany","name":"Alpha Concern Pvt. Ltd.","url":"https://alpha-constructions.vercel.app","logo":"https://alpha-constructions.vercel.app/assets/img/logo.jpg","image":"https://alpha-constructions.vercel.app/assets/img/logo.jpg","address":{"@type":"PostalAddress","streetAddress":"Maharajgunj 4","addressLocality":"Kathmandu","addressRegion":"Bagmati","addressCountry":"NP"},"telephone":"+977-1-4515467","email":"alpha.concern@gmail.com","description":"Premium construction and real estate development based in Maharajgunj, Kathmandu — building residences and commercial spaces engineered to endure.","openingHours":"Su-Fr 10:00-18:00","sameAs":[]}</script>
@@ -93,21 +93,27 @@
   <a href="/contact">Contact</a>
 </div>
 <main id="main">
-  <section class="hero" style="min-height: 50vh;">
-    <div class="hero__bg"></div>
-    <div class="container hero__inner">
+  <section class="hero hero--shot pg-hero" style="min-height:56vh;">
+    <img class="hero--shot__img" src="/assets/img/hero/why-us-building.jpg?v=1785169384"
+         alt="A glazed commercial building at sunset above the Kathmandu valley."
+         width="1672" height="941" fetchpriority="high" decoding="async">
+    <span class="hero--shot__scrim" aria-hidden="true"></span>
+    <div class="container hero__inner hero--shot__inner">
       <div class="eyebrow">Contact</div>
-      <h1 class="hero__title" data-split-words>Let's talk</h1>
-      <p class="hero__sub reveal">Send us a brief about your project, and we'll respond within one working day.</p>
+      <h1 class="hero__title" data-masked>Let's talk</h1>
+      <p class="hero__sub reveal" data-reveal="up">Send us a brief about your project, and we'll respond within one working day.</p>
     </div>
   </section>
 
   <section class="section section--cream">
-    <div class="container split">
-      <div>
+    <div class="container ct-grid">
+
+      <div class="ct-panel reveal" data-reveal="up">
                 
+        <div class="eyebrow" style="margin-bottom:1.5rem;">Project Brief</div>
+
         <form action="/api/contact.php" method="post" novalidate>
-          <input type="hidden" name="csrf_token" value="facdf13dfd2af7327498ba7734abac0d6733cec1fbfdfb1013f3b4868bd01f5c">          <input type="text" name="website" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
+          <input type="hidden" name="csrf_token" value="6142eea48f8dbb6bb8e278323f03e35ba0d746890b0cf674a9f91429b69d60ec">          <input type="text" name="website" style="position:absolute;left:-9999px;" tabindex="-1" autocomplete="off">
 
           <div class="form-group">
             <label class="form-label" for="name">Name *</label>
@@ -134,44 +140,47 @@
             <label class="form-label" for="message">Message *</label>
             <textarea class="form-control" id="message" name="message" required maxlength="3000"></textarea>
           </div>
-          <button class="btn btn-primary" type="submit">Send Message</button>
+          <button class="btn btn-primary is-magnetic" type="submit">Send Message</button>
         </form>
       </div>
 
       <div>
-        <div class="eyebrow reveal">Reach Us</div>
-        <h2 class="display display-md reveal" style="margin: 1rem 0 2rem;">Kathmandu HQ</h2>
+        <div class="eyebrow reveal" data-reveal="up">Reach Us</div>
+        <h2 class="display display-md reveal" data-reveal="mask" style="margin: 1rem 0 2rem;"><span>Kathmandu HQ</span></h2>
 
-        <div style="margin-bottom:2rem;">
-          <div class="eyebrow" style="margin-bottom:.75rem;">Address</div>
-          <p>Maharajgunj 4, Kathmandu, Nepal</p>
-        </div>
-        <div style="margin-bottom:2rem;">
-          <div class="eyebrow" style="margin-bottom:.75rem;">Phone</div>
-          <p><a href="tel:+97714515467" style="color:var(--color-text-primary);">+977-1-4515467</a></p>
-        </div>
-        <div style="margin-bottom:2rem;">
-          <div class="eyebrow" style="margin-bottom:.75rem;">WhatsApp</div>
-          <p><a href="https://wa.me/9779851108892" target="_blank" rel="noopener" style="color:var(--color-text-primary);">+977 9851108892</a></p>
-        </div>
-        <div style="margin-bottom:2rem;">
-          <div class="eyebrow" style="margin-bottom:.75rem;">Email</div>
-          <p><a href="mailto:alpha.concern@gmail.com" style="color:var(--color-text-primary);">alpha.concern@gmail.com</a></p>
-        </div>
-        <div style="margin-bottom:2rem;">
-          <div class="eyebrow" style="margin-bottom:.75rem;">Hours</div>
-          <p>Sunday – Friday, 10:00 AM – 6:00 PM</p>
+        <div class="ct-lines reveal--stagger">
+          <div class="ct-line reveal" data-reveal="up">
+            <div class="eyebrow">Address</div>
+            <p>Maharajgunj 4, Kathmandu, Nepal</p>
+          </div>
+          <div class="ct-line reveal" data-reveal="up">
+            <div class="eyebrow">Phone</div>
+            <p><a href="tel:+97714515467">+977-1-4515467</a></p>
+          </div>
+          <div class="ct-line reveal" data-reveal="up">
+            <div class="eyebrow">WhatsApp</div>
+            <p><a href="https://wa.me/9779851108892" target="_blank" rel="noopener">+977 9851108892</a></p>
+          </div>
+          <div class="ct-line reveal" data-reveal="up">
+            <div class="eyebrow">Email</div>
+            <p><a href="mailto:alpha.concern@gmail.com">alpha.concern@gmail.com</a></p>
+          </div>
+          <div class="ct-line reveal" data-reveal="up" style="border-bottom:0;">
+            <div class="eyebrow">Hours</div>
+            <p class="ct-hours"><span class="ct-dot" aria-hidden="true"></span>Sunday – Friday, 10:00 AM – 6:00 PM</p>
+          </div>
         </div>
 
-        <div style="display:flex; gap:.75rem; flex-wrap:wrap;">
-          <a href="https://wa.me/9779851108892?text=Hello%20Alpha%20Concern%2C%20I%27d%20like%20to%20learn%20more%20about%20your%20services." class="btn btn-primary" target="_blank" rel="noopener">Chat on WhatsApp</a>
-                    <a href="https://maps.app.goo.gl/WS54FhxKFtyg9dBc6" class="btn btn-ghost" target="_blank" rel="noopener">Get Directions</a>
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap; margin-top:2rem;" class="reveal" data-reveal="up">
+          <a href="https://wa.me/9779851108892?text=Hello%20Alpha%20Concern%2C%20I%27d%20like%20to%20learn%20more%20about%20your%20services." class="btn btn-primary is-magnetic" target="_blank" rel="noopener">Chat on WhatsApp</a>
+                    <a href="https://maps.app.goo.gl/WS54FhxKFtyg9dBc6" class="btn btn-ghost is-magnetic" target="_blank" rel="noopener">Get Directions</a>
                   </div>
 
-        <div style="margin-top:3rem; aspect-ratio:16/10; background:var(--color-surface); overflow:hidden;">
+        <div class="reveal" data-reveal="wipe" style="margin-top:3rem; aspect-ratio:16/10; background:var(--color-surface); overflow:hidden; border-radius:16px;">
           <iframe src="https://maps.google.com/maps?q=Maharajgunj+4,+Kathmandu,+Nepal&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Alpha Concern office — Maharajgunj 4, Kathmandu"></iframe>
         </div>
       </div>
+
     </div>
   </section>
 </main>
