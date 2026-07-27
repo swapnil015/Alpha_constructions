@@ -378,7 +378,7 @@ $page_scripts =
 
     <div class="cp__panels">
       <?php foreach ($currentProjects as $i => $p): ?>
-      <article class="cp__panel" data-cp-panel="<?= $i ?>">
+      <article class="cp__panel<?= $p['video'] ? ' is-film' : '' ?>" data-cp-panel="<?= $i ?>">
 
         <div class="cp__media">
           <div class="cp__zoom">
