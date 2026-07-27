@@ -53,14 +53,16 @@
 
   var parts = items.map(function (item) {
     return {
-      el:     item,
-      num:    item.querySelector('.svc__num'),
-      title:  item.querySelector('.svc__title'),
-      words:  Array.prototype.slice.call(item.querySelectorAll('.svc__word')),
-      cta:    item.querySelector('.svc__cta'),
-      figure: item.querySelector('[data-svc-figure]'),
-      img:    item.querySelector('img'),
-      media:  item.querySelector('[data-svc-media]')
+      el:      item,
+      eyebrow: item.querySelector('.svc__eyebrow'),
+      lines:   Array.prototype.slice.call(item.querySelectorAll('.svc__titleTop, .svc__titleBot')),
+      words:   Array.prototype.slice.call(item.querySelectorAll('.svc__word')),
+      rule:    item.querySelector('.svc__rule'),
+      stats:   Array.prototype.slice.call(item.querySelectorAll('.svc__stat')),
+      cta:     item.querySelector('.svc__cta'),
+      figure:  item.querySelector('[data-svc-figure]'),
+      img:     item.querySelector('img'),
+      media:   item.querySelector('[data-svc-media]')
     };
   });
 
@@ -98,10 +100,12 @@
     current  = i;
     setActive(i);
 
+    var toAll = [to.eyebrow].concat(to.lines, [to.rule], to.stats, [to.cta]).filter(Boolean);
+
     if (reduceMotion || instant) {
       gsap.set([from.el, to.el], { clearProps: 'opacity' });
       gsap.set(to.figure, { yPercent: 0, scale: 1, opacity: 1 });
-      gsap.set([to.num, to.title, to.cta], { y: 0, opacity: 1 });
+      gsap.set(toAll, { y: 0, opacity: 1 });
       gsap.set(to.words, { y: 0, opacity: 1 });
       startKenBurns(to);
       return;
@@ -111,9 +115,10 @@
     var E = 'power4.out';
 
     if (from !== to) {
+      var fromAll = [from.eyebrow].concat(from.lines, [from.rule], from.stats, [from.cta]).filter(Boolean);
       gsap.to(from.figure, { scale: 0.94, opacity: 0, duration: 0.75, ease: 'power2.inOut', overwrite: true });
-      gsap.to([from.num, from.title, from.cta], { y: -26, opacity: 0, duration: 0.5, ease: 'power2.inOut', overwrite: true });
-      gsap.to(from.words, { y: -14, opacity: 0, duration: 0.4, ease: 'power2.inOut', overwrite: true });
+      gsap.to(fromAll,     { y: -24, opacity: 0, duration: 0.5, ease: 'power2.inOut', overwrite: true });
+      gsap.to(from.words,  { y: -14, opacity: 0, duration: 0.4, ease: 'power2.inOut', overwrite: true });
     }
 
     var tl = gsap.timeline({ defaults: { ease: E, force3D: true } });
@@ -122,11 +127,18 @@
       { yPercent: 9, scale: 1.05, opacity: 0 },
       { yPercent: 0, scale: 1, opacity: 1, duration: D, onComplete: function () { startKenBurns(to); } }, 0);
 
-    tl.fromTo(to.num,   { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: D * 0.9 }, 0.05);
-    tl.fromTo(to.title, { y: 46, opacity: 0 }, { y: 0, opacity: 1, duration: D },       0.12);
-    tl.fromTo(to.words, { y: 18, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.7, stagger: 0.012 }, 0.24);
-    tl.fromTo(to.cta,   { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 },     0.42);
+    tl.fromTo(to.eyebrow, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: D * 0.8 }, 0.04);
+    tl.fromTo(to.lines,   { y: 48, opacity: 0 },
+      { y: 0, opacity: 1, duration: D, stagger: 0.08 }, 0.1);
+    tl.fromTo(to.words,   { y: 18, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, stagger: 0.012 }, 0.26);
+    if (to.rule) {
+      tl.fromTo(to.rule, { scaleX: 0, transformOrigin: 'left center' },
+        { scaleX: 1, duration: 0.8 }, 0.34);
+    }
+    tl.fromTo(to.stats,   { y: 26, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, stagger: 0.06 }, 0.4);
+    tl.fromTo(to.cta,     { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, 0.54);
   }
 
   // -------------------------------------------------------------------------
@@ -145,8 +157,27 @@
           if (railFill) railFill.style.transform = 'scaleY(' + (max > 0 ? wrap.scrollLeft / max : 0).toFixed(3) + ')';
         };
         wrap.addEventListener('scroll', onScroll, { passive: true });
+
+        // Arrows page the scroller.
+        var mBound = [];
+        function step(dir) {
+          return function () {
+            var w = wrap.clientWidth * 0.86;
+            wrap.scrollBy({ left: dir * w, behavior: 'smooth' });
+          };
+        }
+        section.querySelectorAll('[data-svc-prev]').forEach(function (b) {
+          var fn = step(-1); b.addEventListener('click', fn); mBound.push([b, fn]);
+        });
+        section.querySelectorAll('[data-svc-next]').forEach(function (b) {
+          var fn = step(1); b.addEventListener('click', fn); mBound.push([b, fn]);
+        });
+
         go(0, true);
-        return function () { wrap.removeEventListener('scroll', onScroll); };
+        return function () {
+          wrap.removeEventListener('scroll', onScroll);
+          mBound.forEach(function (p) { p[0].removeEventListener('click', p[1]); });
+        };
       }
 
       go(0, true);
@@ -170,19 +201,30 @@
         }
       });
 
-      // Rail numbers jump the user to a service.
-      var onDot = dots.map(function (dot, k) {
-        var fn = function () {
-          var y = st.start + (st.end - st.start) * ((k + 0.5) / items.length);
-          window.scrollTo({ top: y, behavior: 'smooth' });
-        };
-        dot.addEventListener('click', fn);
-        return fn;
+      // Scroll to the centre of a service's slice. Lenis drives the page, so
+      // hand it the target when it is running — a native smooth scroll would
+      // be fought by Lenis's own interpolation.
+      function goTo(k) {
+        k = Math.max(0, Math.min(items.length - 1, k));
+        var y = st.start + (st.end - st.start) * ((k + 0.5) / items.length);
+        if (window.__lenis) window.__lenis.scrollTo(y, { duration: 1.2 });
+        else window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+
+      var bound = [];
+      function bind(el, fn) { el.addEventListener('click', fn); bound.push([el, fn]); }
+
+      dots.forEach(function (dot, k) { bind(dot, function () { goTo(k); }); });
+      section.querySelectorAll('[data-svc-prev]').forEach(function (b) {
+        bind(b, function () { goTo(current - 1); });
+      });
+      section.querySelectorAll('[data-svc-next]').forEach(function (b) {
+        bind(b, function () { goTo(current + 1); });
       });
 
       return function () {
         st.kill();
-        dots.forEach(function (d, k) { d.removeEventListener('click', onDot[k]); });
+        bound.forEach(function (p) { p[0].removeEventListener('click', p[1]); });
       };
     }
   );

@@ -198,6 +198,40 @@ $page_scripts =
       'structural-engineering' => 'commercial-aerial.jpg',
       'project-management'     => 'apartment-facade.jpg',
   ];
+
+  // Where each title breaks across its two lines (second line is set in gold).
+  // Hand-authored because an automatic split reads badly on several of these.
+  $svcSplit = [
+      'residential'            => ['Residential', 'Construction'],
+      'commercial'             => ['Commercial',  'Construction'],
+      'real-estate'            => ['Real Estate', 'Development'],
+      // "Design & Finishing" is too long to hold one line at the title size —
+      // it would wrap to a third line and shift the whole block.
+      'interior-design'        => ['Interior Design', '& Finishing'],
+      'structural-engineering' => ['Structural',  'Engineering'],
+      'project-management'     => ['Project',     'Management'],
+  ];
+
+  /*
+   * Per-service figures for the stat row.
+   *
+   * These are drawn from the site-wide numbers in site_settings, which are the
+   * only verified figures available — so every service currently shows the same
+   * three. Genuinely per-service metrics need real numbers from the client;
+   * there is no services table column for them yet. Do not invent any.
+   */
+  $svcStats = [
+      ['icon' => 'home',  'value' => (int)setting('stat_projects', 50) . '+', 'label' => 'Projects Completed'],
+      ['icon' => 'plan',  'value' => (int)setting('stat_clients', 200) . '+', 'label' => 'Happy Clients'],
+      ['icon' => 'award', 'value' => (int)setting('stat_years', 10) . '+',    'label' => 'Years Experience'],
+  ];
+
+  // Minimal line icons, matching the hairline weight of the rest of the section.
+  $svcIcons = [
+      'home'  => '<path d="M3 11.5 12 4l9 7.5V21h-6v-6h-6v6H3z"/>',
+      'plan'  => '<path d="M4 4h16v16H4z"/><path d="M4 9h5v6H4z"/><path d="M13 4v6h7"/>',
+      'award' => '<circle cx="12" cy="9" r="5"/><path d="M9 13.5 7.5 21l4.5-2.5L16.5 21 15 13.5"/>',
+  ];
   ?>
   <section class="svc" data-svc aria-label="What we do">
     <div class="svc__stage" data-svc-stage>
@@ -207,11 +241,11 @@ $page_scripts =
         <span class="svc__glow"></span>
       </div>
 
-      <div class="svc__eyebrow">What We Do</div>
+      <!-- Hairline the rail sits against, full stage height. -->
+      <span class="svc__hairline" aria-hidden="true"></span>
 
-      <!-- Vertical rail. Frosted glass, hairline gold border. -->
+      <!-- Vertical index. Active number turns gold and grows a lead line. -->
       <nav class="svc__rail" aria-label="Service navigation">
-        <span class="svc__railTrack" aria-hidden="true"><span class="svc__railFill" data-svc-railfill></span></span>
         <?php foreach ($services as $i => $s): ?>
         <button type="button" class="svc__railItem<?= $i === 0 ? ' is-active' : '' ?>"
                 data-svc-dot="<?= $i ?>" aria-label="<?= e($s['title']) ?>">
@@ -226,13 +260,40 @@ $page_scripts =
           $src = $img !== ''
               ? ($img[0] === '/' ? $img : asset(ltrim($img, '/')))
               : asset('assets/img/story/' . ($svcFallback[$s['slug']] ?? 'commercial-aerial.jpg'));
+
+          // Fall back to splitting after the first word if the slug is unknown.
+          $parts = $svcSplit[$s['slug']] ?? (function (string $t): array {
+              $p = explode(' ', $t, 2);
+              return [$p[0], $p[1] ?? ''];
+          })($s['title']);
         ?>
         <article class="svc__item<?= $i === 0 ? ' is-active' : '' ?>" data-svc-item="<?= $i ?>">
 
           <div class="svc__text">
-            <div class="svc__num" aria-hidden="true"><?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></div>
-            <h2 class="svc__title"><?= e($s['title']) ?></h2>
+            <div class="svc__eyebrow">What We Do<span aria-hidden="true"></span></div>
+
+            <h2 class="svc__title">
+              <span class="svc__titleTop"><?= e($parts[0]) ?></span>
+              <?php if ($parts[1] !== ''): ?><span class="svc__titleBot"><?= e($parts[1]) ?></span><?php endif; ?>
+            </h2>
+
             <p class="svc__desc" data-svc-desc><?= e($s['description']) ?></p>
+
+            <span class="svc__rule" aria-hidden="true"></span>
+
+            <ul class="svc__stats">
+              <?php foreach ($svcStats as $stat): ?>
+              <li class="svc__stat">
+                <svg class="svc__statIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <?= $svcIcons[$stat['icon']] ?>
+                </svg>
+                <span class="svc__statValue"><?= e($stat['value']) ?></span>
+                <span class="svc__statLabel"><?= e($stat['label']) ?></span>
+              </li>
+              <?php endforeach; ?>
+            </ul>
+
             <a class="svc__cta" href="/services/<?= e($s['slug']) ?>">
               <span>Explore Projects</span>
               <i aria-hidden="true">→</i>
@@ -251,7 +312,15 @@ $page_scripts =
         <?php endforeach; ?>
       </div>
 
-      <a class="svc__all" href="/services">Explore All Services</a>
+      <!-- Step controls: vertical bottom-left, horizontal over the image. -->
+      <div class="svc__nav svc__nav--v">
+        <button type="button" data-svc-prev aria-label="Previous service">&#8593;</button>
+        <button type="button" data-svc-next aria-label="Next service">&#8595;</button>
+      </div>
+      <div class="svc__nav svc__nav--h">
+        <button type="button" data-svc-prev aria-label="Previous service">&#8592;</button>
+        <button type="button" data-svc-next aria-label="Next service">&#8594;</button>
+      </div>
 
       <!-- Circular cursor indicator, shown only over the imagery. -->
       <div class="svc__cursor" data-svc-cursor aria-hidden="true"><span>Explore</span></div>
