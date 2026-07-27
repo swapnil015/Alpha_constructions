@@ -1095,3 +1095,332 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   .story__copy { bottom: 1.5rem; width: min(20rem, 40vw); }
   .story__text { display: none; }
 }
+
+/* ===========================================================================
+   Services — pinned cinematic sequence (home)
+   One service per viewport, driven by assets/js/services.js.
+   =========================================================================== */
+
+.svc {
+  --svc-bg:     #063B37;   /* dark emerald */
+  --svc-gold:   #D4A43A;
+  --svc-ink:    #F4EFE3;
+  --svc-muted:  rgba(244, 239, 227, .62);
+  --svc-hair:   rgba(212, 164, 58, .28);
+  --svc-radius: 24px;
+
+  position: relative;
+  background: var(--svc-bg);
+  color: var(--svc-ink);
+}
+
+.svc__stage {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+/* -- Background ------------------------------------------------------------ */
+.svc__bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+
+/* Blueprint grid, deliberately near-invisible. A slow drift makes it read as
+   depth rather than as a texture. */
+.svc__grid {
+  position: absolute; inset: -10%;
+  background-image:
+    linear-gradient(to right,  rgba(244,239,227,.9) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244,239,227,.9) 1px, transparent 1px);
+  background-size: 96px 96px;
+  opacity: .04;
+  animation: svcDrift 40s linear infinite;
+  will-change: transform;
+}
+@keyframes svcDrift {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-96px, -96px, 0); }
+}
+
+/* Soft radial pool behind the text column. */
+.svc__glow {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(58% 62% at 26% 45%, rgba(212,164,58,.10), transparent 62%),
+    radial-gradient(70% 70% at 82% 70%, rgba(0,0,0,.42), transparent 70%);
+}
+
+/* -- Static eyebrow -------------------------------------------------------- */
+.svc__eyebrow {
+  position: absolute; z-index: 4;
+  top: clamp(3.5rem, 9vh, 6rem);
+  left: 50%; transform: translateX(-50%);
+  font-family: var(--font-heading); font-weight: 600;
+  font-size: .66rem; letter-spacing: .42em; text-transform: uppercase;
+  color: var(--svc-gold);
+}
+
+/* -- Vertical rail — frosted glass, gold hairline -------------------------- */
+.svc__rail {
+  position: absolute; z-index: 5;
+  left: clamp(.9rem, 2.4vw, 2.2rem);
+  top: 50%; transform: translateY(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .55rem;
+  padding: 1rem .55rem;
+  border-radius: 999px;
+  border: 1px solid var(--svc-hair);
+  background: rgba(244, 239, 227, .045);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  box-shadow: inset 0 1px 0 rgba(244,239,227,.10), 0 18px 40px rgba(0,0,0,.28);
+}
+
+/* Progress line runs the height of the rail, behind the numbers. */
+.svc__railTrack {
+  position: absolute; left: 50%; top: .9rem; bottom: .9rem; width: 1px;
+  transform: translateX(-50%);
+  background: rgba(244, 239, 227, .14);
+  overflow: hidden;
+}
+.svc__railFill {
+  display: block; width: 100%; height: 100%;
+  background: var(--svc-gold);
+  transform: scaleY(0); transform-origin: top center;
+}
+
+.svc__railItem {
+  position: relative; z-index: 1;
+  font-family: var(--font-heading); font-weight: 600;
+  font-size: .62rem; letter-spacing: .1em;
+  color: var(--svc-muted);
+  padding: .3rem .35rem;
+  background: var(--svc-bg);
+  border-radius: 4px;
+  transition: color .45s var(--ease-out), transform .45s var(--ease-out);
+}
+.svc__railItem.is-active { color: var(--svc-gold); transform: scale(1.18); }
+
+/* -- Items ----------------------------------------------------------------- */
+.svc__items { position: relative; width: 100%; }
+
+.svc__item {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding: 0 clamp(3.5rem, 7vw, 7rem) 0 clamp(4.5rem, 8vw, 8rem);
+  opacity: 0;
+  pointer-events: none;
+}
+.svc__item.is-active { opacity: 1; pointer-events: auto; }
+
+/* Before JS confirms GSAP is present, show only the first item — never a
+   flash of six services stacked on top of each other. */
+.svc:not(.is-live):not(.is-static) .svc__item { opacity: 0; }
+.svc:not(.is-live):not(.is-static) .svc__item:first-child { opacity: 1; }
+
+/* -- Text column ----------------------------------------------------------- */
+.svc__text { position: relative; z-index: 3; }
+
+.svc__num {
+  font-family: var(--font-display);
+  font-size: clamp(5rem, 13vw, 11rem);
+  line-height: .8;
+  font-weight: 300;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(244, 239, 227, .16);
+  margin-bottom: -.12em;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.svc__title {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(2rem, 3.6vw, 3.5rem);
+  line-height: 1.04; letter-spacing: -.02em;
+  color: var(--svc-ink);
+  margin: 0 0 1.15rem;
+  will-change: transform, opacity;
+}
+
+.svc__desc {
+  margin: 0 0 2rem;
+  max-width: 34ch;
+  font-size: clamp(.92rem, 1.15vw, 1.02rem);
+  line-height: 1.75;
+  color: var(--svc-muted);
+}
+.svc__word { display: inline-block; will-change: transform, opacity; }
+
+/* CTA — gold underline grows from the left, arrow slides right. */
+.svc__cta {
+  position: relative; display: inline-flex; align-items: center; gap: .8rem;
+  font-family: var(--font-heading); font-weight: 600;
+  font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--svc-ink);
+  padding-bottom: .6rem;
+  will-change: transform, opacity;
+}
+.svc__cta::after {
+  content: ""; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%;
+  background: var(--svc-gold);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform .55s var(--ease-out);
+}
+.svc__cta:hover::after { transform: scaleX(1); }
+.svc__cta i { font-style: normal; transition: transform .5s var(--ease-out); }
+.svc__cta:hover i { transform: translateX(8px); }
+
+/* -- Media ----------------------------------------------------------------- */
+.svc__media {
+  position: relative;
+  border-radius: var(--svc-radius);
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, .45);
+  will-change: transform;            /* mouse parallax */
+  transition: filter .6s var(--ease-out), box-shadow .6s var(--ease-out);
+}
+.svc__media.is-hover {
+  filter: brightness(1.06);
+  box-shadow: 0 44px 100px rgba(0,0,0,.5), 0 0 0 1px var(--svc-hair);
+}
+
+/* Entrance transform lives here; the Ken Burns scale lives on the <img>.
+   Separate elements so the two tweens never overwrite each other. */
+.svc__figure { position: absolute; inset: 0; will-change: transform, opacity; }
+.svc__figure img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+.svc__vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(78% 78% at 50% 45%, transparent 52%, rgba(0, 20, 18, .48) 100%),
+    linear-gradient(to top, rgba(0, 20, 18, .34), transparent 42%);
+}
+
+/* -- Footer link ----------------------------------------------------------- */
+.svc__all {
+  position: absolute; z-index: 4;
+  bottom: clamp(2rem, 6vh, 3.5rem); left: 50%; transform: translateX(-50%);
+  font-family: var(--font-heading); font-weight: 600;
+  font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--svc-muted);
+  padding-bottom: .45rem;
+  border-bottom: 1px solid var(--svc-hair);
+  transition: color .45s var(--ease-out), letter-spacing .45s var(--ease-out);
+}
+.svc__all:hover { color: var(--svc-gold); letter-spacing: .3em; }
+
+/* -- Explore cursor -------------------------------------------------------- */
+.svc__cursor {
+  position: fixed; top: 0; left: 0; z-index: 90;
+  width: 92px; height: 92px; margin: -46px 0 0 -46px;
+  border-radius: 50%;
+  border: 1px solid var(--svc-hair);
+  background: rgba(6, 59, 55, .55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: grid; place-items: center;
+  font-family: var(--font-heading); font-weight: 600;
+  font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--svc-gold);
+  opacity: 0; transform: scale(.7);
+  transition: opacity .35s var(--ease-out), transform .35s var(--ease-out);
+  pointer-events: none;
+}
+.svc__cursor.is-visible { opacity: 1; transform: scale(1); }
+
+/* ---------------------------------------------------------------------------
+   Tablet — image above, content below.
+   --------------------------------------------------------------------------- */
+@media (max-width: 1100px) and (min-width: 861px) {
+  .svc__item {
+    grid-template-columns: 1fr;
+    grid-template-rows: 52% auto;
+    align-content: center;
+    gap: 2rem;
+    padding: 5.5rem clamp(3rem, 6vw, 5rem) 4.5rem clamp(4.5rem, 7vw, 6rem);
+  }
+  .svc__media { aspect-ratio: auto; height: 100%; }
+  .svc__num { font-size: clamp(3.5rem, 9vw, 6rem); }
+  .svc__desc { max-width: 52ch; }
+}
+
+/* ---------------------------------------------------------------------------
+   Mobile — no pinning. The same markup becomes a horizontal snap scroller.
+   --------------------------------------------------------------------------- */
+@media (max-width: 860px) {
+  .svc__stage {
+    height: auto;
+    display: block;
+    padding: clamp(5rem, 14vh, 7rem) 0 clamp(3.5rem, 10vh, 5rem);
+  }
+
+  .svc__items {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 6vw;
+  }
+  .svc__items::-webkit-scrollbar { display: none; }
+
+  .svc__item {
+    position: static;
+    flex: 0 0 88%;
+    scroll-snap-align: center;
+    display: block;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0;
+  }
+  /* Every card must stay readable in the scroller regardless of JS state. */
+  .svc:not(.is-live) .svc__item,
+  .svc.is-live .svc__item { opacity: 1; }
+
+  .svc__media { aspect-ratio: 4 / 3; margin-bottom: 1.5rem; }
+  .svc__figure img { transform: none !important; }   /* no Ken Burns on mobile */
+
+  .svc__num   { font-size: 3.4rem; margin-bottom: .1em; }
+  .svc__title { font-size: clamp(1.5rem, 6vw, 2rem); }
+  .svc__desc  { max-width: none; margin-bottom: 1.4rem; }
+
+  .svc__rail {
+    left: 50%; top: auto; bottom: 0;
+    transform: translateX(-50%);
+    flex-direction: row;
+    padding: .5rem 1rem;
+  }
+  .svc__railTrack {
+    left: .9rem; right: .9rem; top: 50%; bottom: auto;
+    width: auto; height: 1px; transform: translateY(-50%);
+  }
+  .svc__railFill { transform-origin: left center; }
+
+  .svc__all {
+    position: static; display: block; width: max-content;
+    margin: 2.5rem auto 0; transform: none;
+  }
+  .svc__cursor { display: none; }
+}
+
+/* -- No JS / reduced motion ------------------------------------------------- */
+.svc.is-static .svc__stage { height: auto; display: block; padding: var(--section-y) 0; }
+.svc.is-static .svc__items { display: grid; gap: 4rem; padding: 0 var(--gutter); }
+.svc.is-static .svc__item  { position: static; opacity: 1; pointer-events: auto; padding: 0; }
+.svc.is-static .svc__rail  { display: none; }
+.svc.is-static .svc__all   { position: static; display: block; width: max-content; margin: 3rem auto 0; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .svc__grid { animation: none; }
+  .svc__figure img { transform: none !important; }
+}

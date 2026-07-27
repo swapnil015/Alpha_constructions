@@ -11,7 +11,8 @@ $blogs = db_all("SELECT * FROM blog_posts WHERE status='published' ORDER BY publ
 // here — the engine is dead weight on every other page.
 $page_scripts =
     '<script src="' . asset('assets/js/sequence.js') . '" defer></script>' .
-    '<script src="' . asset('assets/js/story.js')    . '" defer></script>';
+    '<script src="' . asset('assets/js/story.js')    . '" defer></script>' .
+    '<script src="' . asset('assets/js/services.js') . '" defer></script>';
 ?>
 
 <main id="main">
@@ -180,24 +181,81 @@ $page_scripts =
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section class="section section--surface">
-    <div class="container">
-      <div style="text-align:center; max-width:640px; margin:0 auto;">
-        <div class="eyebrow reveal">What We Do</div>
-        <h2 class="display display-lg reveal" style="margin-top:1rem;">A complete construction practice</h2>
-        <p class="lede reveal" style="margin: 1.25rem auto 0;">From bespoke residences to commercial towers — engineering, design, and delivery under one roof.</p>
+  <!-- ==========================================================================
+       SERVICES — pinned, one service per viewport (assets/js/services.js)
+       Each .svc__item holds both its text and its image so the same markup can
+       stack absolutely on desktop and become a horizontal snap-scroller on
+       mobile, where pinning is disabled.
+       ========================================================================== -->
+  <?php
+  // Fallback imagery per service. services.hero_image takes precedence, so this
+  // becomes dead weight the moment images are uploaded through the admin panel.
+  $svcFallback = [
+      'residential'            => 'residence-brick.jpg',
+      'commercial'             => 'aion-corner.jpg',
+      'real-estate'            => 'apartment-dusk.jpg',
+      'interior-design'        => 'aion-showroom.jpg',
+      'structural-engineering' => 'commercial-aerial.jpg',
+      'project-management'     => 'apartment-facade.jpg',
+  ];
+  ?>
+  <section class="svc" data-svc aria-label="What we do">
+    <div class="svc__stage" data-svc-stage>
+
+      <div class="svc__bg" aria-hidden="true">
+        <span class="svc__grid"></span>
+        <span class="svc__glow"></span>
       </div>
-      <div class="cards-grid">
-        <?php foreach ($services as $s): ?>
-        <a href="/services/<?= e($s['slug']) ?>" class="service-card reveal">
-          <svg class="service-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M3 21V9l9-6 9 6v12h-6v-7h-6v7H3z"/></svg>
-          <h3 class="service-card__title"><?= e($s['title']) ?></h3>
-          <p class="service-card__desc"><?= e($s['description']) ?></p>
-        </a>
+
+      <div class="svc__eyebrow">What We Do</div>
+
+      <!-- Vertical rail. Frosted glass, hairline gold border. -->
+      <nav class="svc__rail" aria-label="Service navigation">
+        <span class="svc__railTrack" aria-hidden="true"><span class="svc__railFill" data-svc-railfill></span></span>
+        <?php foreach ($services as $i => $s): ?>
+        <button type="button" class="svc__railItem<?= $i === 0 ? ' is-active' : '' ?>"
+                data-svc-dot="<?= $i ?>" aria-label="<?= e($s['title']) ?>">
+          <?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?>
+        </button>
+        <?php endforeach; ?>
+      </nav>
+
+      <div class="svc__items" data-svc-items>
+        <?php foreach ($services as $i => $s):
+          $img = trim((string)($s['hero_image'] ?? ''));
+          $src = $img !== ''
+              ? ($img[0] === '/' ? $img : asset(ltrim($img, '/')))
+              : asset('assets/img/story/' . ($svcFallback[$s['slug']] ?? 'commercial-aerial.jpg'));
+        ?>
+        <article class="svc__item<?= $i === 0 ? ' is-active' : '' ?>" data-svc-item="<?= $i ?>">
+
+          <div class="svc__text">
+            <div class="svc__num" aria-hidden="true"><?= str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT) ?></div>
+            <h2 class="svc__title"><?= e($s['title']) ?></h2>
+            <p class="svc__desc" data-svc-desc><?= e($s['description']) ?></p>
+            <a class="svc__cta" href="/services/<?= e($s['slug']) ?>">
+              <span>Explore Projects</span>
+              <i aria-hidden="true">→</i>
+            </a>
+          </div>
+
+          <figure class="svc__media" data-svc-media>
+            <div class="svc__figure" data-svc-figure>
+              <img src="<?= e($src) ?>" alt="<?= e($s['title']) ?> — Alpha Concern project"
+                   loading="lazy" decoding="async" width="1600" height="1000">
+            </div>
+            <span class="svc__vignette" aria-hidden="true"></span>
+          </figure>
+
+        </article>
         <?php endforeach; ?>
       </div>
-      <div style="text-align:center; margin-top:3rem;"><a href="/services" class="btn-text">Explore All Services</a></div>
+
+      <a class="svc__all" href="/services">Explore All Services</a>
+
+      <!-- Circular cursor indicator, shown only over the imagery. -->
+      <div class="svc__cursor" data-svc-cursor aria-hidden="true"><span>Explore</span></div>
+
     </div>
   </section>
 
