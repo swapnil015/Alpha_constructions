@@ -43,6 +43,9 @@ $routes = [
     '/admin/careers/applications'=> 'careers-applications',
     '/admin/careers/cv'          => 'careers-cv',
     '/admin/media'               => 'media',
+    '/admin/services'            => 'services',
+    '/admin/team'                => 'team',
+    '/admin/homepage'            => 'homepage',
     '/admin/settings'            => 'settings',
     '/admin/users'               => 'users',
 ];

@@ -110,7 +110,11 @@ $page_scripts =
       <div class="container story__inner">
 
         <h2 class="story__headline" data-story-headline>
-          A building is <em>drawn</em><br>long before it is <em>built</em>.
+          <?php if (setting('story_headline')): ?>
+            <?= e(setting('story_headline')) ?>
+          <?php else: ?>
+            A building is <em>drawn</em><br>long before it is <em>built</em>.
+          <?php endif; ?>
         </h2>
 
         <!-- Cards. data-depth drives parallax distance: higher = nearer the
@@ -158,23 +162,21 @@ $page_scripts =
           </figure>
         </div>
 
-        <!-- Copy blocks cross-fade, each owning a slice of the timeline. -->
+        <!-- Copy blocks cross-fade, each owning a slice of the timeline.
+             Editable in /admin/homepage; defaults below are the fallback. -->
+        <?php $storyDefaults = [
+            1 => ['01 — Design',   setting('about_snapshot')],
+            2 => ['02 — Engineer', 'Every structure is resolved for NBC 105 seismic performance and put through independent peer review before a foundation is poured.'],
+            3 => ['03 — Deliver',  'Core trades stay in house, so quality control and programme sit with one accountable team from ground-breaking to handover.'],
+        ]; ?>
         <div class="story__copy">
+          <?php foreach ($storyDefaults as $i => [$eyebrow, $text]): ?>
           <div class="story__block" data-story-block>
-            <div class="story__eyebrow">01 — Design</div>
-            <p class="story__text"><?= e(setting('about_snapshot')) ?></p>
+            <div class="story__eyebrow"><?= e(setting("story_eyebrow_$i", $eyebrow)) ?></div>
+            <p class="story__text"><?= e(setting("story_text_$i", $text)) ?></p>
+            <?php if ($i === 3): ?><a href="/about" class="story__link">Our Story</a><?php endif; ?>
           </div>
-
-          <div class="story__block" data-story-block>
-            <div class="story__eyebrow">02 — Engineer</div>
-            <p class="story__text">Every structure is resolved for NBC 105 seismic performance and put through independent peer review before a foundation is poured.</p>
-          </div>
-
-          <div class="story__block" data-story-block>
-            <div class="story__eyebrow">03 — Deliver</div>
-            <p class="story__text">Core trades stay in house, so quality control and programme sit with one accountable team from ground-breaking to handover.</p>
-            <a href="/about" class="story__link">Our Story</a>
-          </div>
+          <?php endforeach; ?>
         </div>
 
       </div>
@@ -344,8 +346,8 @@ $page_scripts =
    * yet. Imperial Apartment has none — its DB hero_image points at
    * /uploads/projects/imperial-apartment/hero.jpg, which does not exist.
    */
-  $currentProjects = [
-      [
+  $cpDefaults = [
+      1 => [
           'slug'     => 'imperial-apartment',
           'name'     => 'Imperial Apartment',
           'category' => 'Residential',
@@ -354,7 +356,7 @@ $page_scripts =
           'video'    => null,
           'poster'   => asset('assets/img/story/apartment-facade.jpg'),
       ],
-      [
+      2 => [
           'slug'     => 'budhanilkantha-heights',
           'name'     => 'Budhanilkantha Heights',
           'category' => 'Residential',
@@ -364,6 +366,19 @@ $page_scripts =
           'poster'   => asset('assets/video/budhanilkantha-heights.jpg'),
       ],
   ];
+  // Every field is editable in /admin/homepage; empty settings keep the defaults.
+  $currentProjects = [];
+  foreach ($cpDefaults as $n => $d) {
+      $currentProjects[] = [
+          'slug'     => setting("cp{$n}_slug",     $d['slug']),
+          'name'     => setting("cp{$n}_name",     $d['name']),
+          'category' => setting("cp{$n}_category", $d['category']),
+          'location' => setting("cp{$n}_location", $d['location']),
+          'status'   => setting("cp{$n}_status",   $d['status']),
+          'video'    => setting("cp{$n}_video")    ?: $d['video'],
+          'poster'   => setting("cp{$n}_poster")   ?: $d['poster'],
+      ];
+  }
   ?>
   <section class="cp" data-cp aria-label="Current projects">
 
@@ -458,7 +473,7 @@ $page_scripts =
           '<path d="m17 24 5 5 10-10"/>',
   ];
 
-  $whyItems = [
+  $whyDefaults = [
       ['tower',     'Decade of Delivery',      'Over ten years executing residential, commercial, and mixed-use projects across the Kathmandu Valley.'],
       ['blueprint', 'Engineering Rigour',      'Every structure designed for NBC 105 seismic resilience with verified peer review.'],
       ['compass',   'Architectural Restraint', 'We design for longevity — finishes and lines that age with grace, not trend.'],
@@ -466,6 +481,12 @@ $page_scripts =
       ['tools',     'In-house Trades',         'Core trades retained internally for tighter quality control and on-time handover.'],
       ['shield',    'Post-Handover Care',      '24-month workmanship warranty with responsive maintenance support.'],
   ];
+  // Titles and text editable in /admin/homepage; icons stay with the slot.
+  $whyItems = [];
+  foreach ($whyDefaults as $i => [$icon, $title, $desc]) {
+      $n = $i + 1;
+      $whyItems[] = [$icon, setting("why{$n}_title", $title), setting("why{$n}_desc", $desc)];
+  }
   ?>
   <section class="why" data-why aria-label="Why Alpha Concern">
 

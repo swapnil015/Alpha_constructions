@@ -87,7 +87,10 @@ hr{border:0;border-top:1px solid var(--border);margin:1.5rem 0}
     </div>
     <div class="nav-group">
       <div class="nav-group__title">Content</div>
+      <a class="nav-link <?= str_starts_with($_SERVER['REQUEST_URI'],'/admin/homepage')?'is-active':''?>" href="/admin/homepage">Homepage</a>
       <a class="nav-link <?= str_starts_with($_SERVER['REQUEST_URI'],'/admin/projects')?'is-active':''?>" href="/admin/projects">Projects</a>
+      <a class="nav-link <?= str_starts_with($_SERVER['REQUEST_URI'],'/admin/services')?'is-active':''?>" href="/admin/services">Services</a>
+      <a class="nav-link <?= str_starts_with($_SERVER['REQUEST_URI'],'/admin/team')?'is-active':''?>" href="/admin/team">Team</a>
       <a class="nav-link <?= str_starts_with($_SERVER['REQUEST_URI'],'/admin/blog')?'is-active':''?>" href="/admin/blog">Blog Posts</a>
       <a class="nav-link <?= str_starts_with($_SERVER['REQUEST_URI'],'/admin/media')?'is-active':''?>" href="/admin/media">Media Library</a>
     </div>

@@ -14,9 +14,9 @@ CREATE TABLE admin_users (
   last_login TEXT NULL,
   created_at TEXT DEFAULT CURRENT_TIMESTAMP
 );
--- Default admin: admin@alphaconcern.com / preview1234
+-- Default admin: admin@alphaconcern.com / ChangeMe!2026 (matches README + MySQL schema)
 INSERT INTO admin_users (name,email,password_hash,role) VALUES
-('Super Admin','admin@alphaconcern.com','$2y$10$GO..3sEiB5QvI8/Q8Qqw/O/U1uVstbhYA.2xVRCdxXWw1UbQ.2JH2','superadmin');
+('Super Admin','admin@alphaconcern.com','$2y$10$T3E9XRCwC9xifBYCh79oa.oRuwSoksb2lmzRzQyF6j8VWAtuHt4mO','superadmin');
 
 CREATE TABLE projects (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
