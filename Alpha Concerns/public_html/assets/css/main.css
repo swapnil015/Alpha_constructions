@@ -973,17 +973,22 @@ textarea.form-control { min-height: 150px; resize: vertical; }
    the CDN is blocked — cards stay visible (see .is-static). */
 .story.is-live .story__cardInner { opacity: 0; }
 
-.story__card--1 { left: 44%; top:  6%; width: 27%; z-index: 3; }
-.story__card--2 { left: 75%; top: 30%; width: 23%; z-index: 1; }
-.story__card--3 { left: 37%; top: 53%; width: 25%; z-index: 5; }
-.story__card--4 { left: 63%; top:  2%; width: 16%; z-index: 2; }
-.story__card--5 { left: 69%; top: 66%; width: 22%; z-index: 4; }
+/* Positions are tuned so the two portrait cards (2 and 4) stack diagonally on
+   the right without colliding, and nothing crosses into the headline (top
+   left) or the copy column (bottom left, ~36% wide). */
+.story__card--1 { left: 42%; top:  5%; width: 28%; z-index: 3; }
+.story__card--2 { left: 74%; top: 30%; width: 20%; z-index: 1; }
+.story__card--3 { left: 38%; top: 53%; width: 26%; z-index: 5; }
+.story__card--4 { left: 68%; top:  4%; width: 15%; z-index: 2; }
+.story__card--5 { left: 62%; top: 67%; width: 24%; z-index: 4; }
 
-.story__card--1 .story__cardInner { aspect-ratio: 4 / 3; }
-.story__card--2 .story__cardInner { aspect-ratio: 3 / 4; }
-.story__card--3 .story__cardInner { aspect-ratio: 16 / 10; }
-.story__card--4 .story__cardInner { aspect-ratio: 1 / 1; }
-.story__card--5 .story__cardInner { aspect-ratio: 16 / 9; }
+/* Each ratio is the photo's native ratio, so object-fit: cover never actually
+   crops. Change the image and you must change the ratio with it. */
+.story__card--1 .story__cardInner { aspect-ratio: 1332 / 1181; }  /* commercial-aerial  */
+.story__card--2 .story__cardInner { aspect-ratio:  900 / 1600; }  /* aion-corner        */
+.story__card--3 .story__cardInner { aspect-ratio: 1325 /  881; }  /* apartment-dusk     */
+.story__card--4 .story__cardInner { aspect-ratio:  900 / 1600; }  /* aion-showroom      */
+.story__card--5 .story__cardInner { aspect-ratio: 1600 /  900; }  /* residence-brick    */
 
 /* -- Copy ------------------------------------------------------------------ */
 .story__copy {
@@ -1057,8 +1062,9 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 /* -- Responsive ------------------------------------------------------------ */
 @media (max-width: 1024px) {
   .story__copy { width: min(24rem, 42vw); }
-  .story__card--1 { left: 40%; width: 30%; }
-  .story__card--3 { left: 34%; width: 28%; }
+  .story__card--1 { left: 38%; width: 31%; }
+  .story__card--3 { left: 36%; width: 29%; }
+  .story__card--2 { width: 22%; }
 }
 
 @media (max-width: 720px) {
@@ -1069,9 +1075,11 @@ textarea.form-control { min-height: 150px; resize: vertical; }
     font-size: clamp(1.9rem, 8.5vw, 2.6rem);
     max-width: 12ch;
   }
-  .story__card--1 { left:  0%; top: 26%; width: 58%; }
-  .story__card--2 { left: 60%; top: 20%; width: 40%; }
-  .story__card--3 { left: 14%; top: 50%; width: 52%; }
+  /* Card 2 is portrait, so it needs less width than a landscape slot would to
+     occupy the same height. */
+  .story__card--1 { left:  0%; top: 28%; width: 56%; }
+  .story__card--2 { left: 62%; top: 18%; width: 34%; }
+  .story__card--3 { left: 16%; top: 54%; width: 54%; }
   .story__card--4,
   .story__card--5 { display: none; }
 

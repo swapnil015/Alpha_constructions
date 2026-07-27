@@ -113,36 +113,46 @@ $page_scripts =
         </h2>
 
         <!-- Cards. data-depth drives parallax distance: higher = nearer the
-             viewer = travels further. Frames are drawn from the hero sequence,
-             so the section needs no separate photography. -->
-        <div class="story__field" aria-hidden="true">
+             viewer = travels further. Each slot's aspect-ratio in main.css
+             matches its photo's native ratio, so nothing is cropped. -->
+        <div class="story__field">
           <figure class="story__card story__card--1" data-story-card data-depth="1">
             <div class="story__cardInner" data-story-inner>
-              <img src="<?= asset('assets/frames/ezgif-frame-018.jpg') ?>" alt="" loading="lazy" decoding="async" width="1280" height="720">
+              <img src="<?= asset('assets/img/story/commercial-aerial.jpg') ?>"
+                   alt="Aerial view of a commercial block with fluted metal and timber screening."
+                   loading="lazy" decoding="async" width="1332" height="1181">
             </div>
           </figure>
 
           <figure class="story__card story__card--2" data-story-card data-depth="0.4">
             <div class="story__cardInner" data-story-inner>
-              <img src="<?= asset('assets/frames/ezgif-frame-072.jpg') ?>" alt="" loading="lazy" decoding="async" width="1280" height="720">
+              <img src="<?= asset('assets/img/story/aion-corner.jpg') ?>"
+                   alt="Glazed corner showroom on Jhamsikhel Road, Kathmandu."
+                   loading="lazy" decoding="async" width="900" height="1600">
             </div>
           </figure>
 
           <figure class="story__card story__card--3" data-story-card data-depth="1.3">
             <div class="story__cardInner" data-story-inner>
-              <img src="<?= asset('assets/frames/ezgif-frame-118.jpg') ?>" alt="" loading="lazy" decoding="async" width="1280" height="720">
+              <img src="<?= asset('assets/img/story/apartment-dusk.jpg') ?>"
+                   alt="Curved residential apartment block at dusk against a wooded hillside."
+                   loading="lazy" decoding="async" width="1325" height="881">
             </div>
           </figure>
 
           <figure class="story__card story__card--4" data-story-card data-depth="0.7">
             <div class="story__cardInner" data-story-inner>
-              <img src="<?= asset('assets/frames/ezgif-frame-168.jpg') ?>" alt="" loading="lazy" decoding="async" width="1280" height="720">
+              <img src="<?= asset('assets/img/story/aion-showroom.jpg') ?>"
+                   alt="Double-height glazed motor showroom with a car on display."
+                   loading="lazy" decoding="async" width="900" height="1600">
             </div>
           </figure>
 
           <figure class="story__card story__card--5" data-story-card data-depth="1">
             <div class="story__cardInner" data-story-inner>
-              <img src="<?= asset('assets/frames/ezgif-frame-214.jpg') ?>" alt="" loading="lazy" decoding="async" width="1280" height="720">
+              <img src="<?= asset('assets/img/story/residence-brick.jpg') ?>"
+                   alt="Brick and render private residence with landscaped garden."
+                   loading="lazy" decoding="async" width="1600" height="900">
             </div>
           </figure>
         </div>
