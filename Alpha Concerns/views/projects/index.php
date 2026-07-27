@@ -19,9 +19,14 @@ foreach ($projects as $p) { $byStatus[$p['status']][] = $p; }
 $page_scripts = '<script src="' . asset('assets/js/projects-list.js') . '" defer></script>';
 ?>
 <main id="main">
-  <section class="hero" style="min-height: 60vh;">
-    <div class="hero__bg"></div>
-    <div class="container hero__inner">
+  <section class="hero hero--shot">
+    <img class="hero--shot__img"
+         src="<?= asset('assets/img/hero/projects-site.jpg') ?>"
+         alt="Engineers on a reinforced concrete frame at sunset, with tower cranes over a rising structure."
+         width="1672" height="941" fetchpriority="high" decoding="async">
+    <span class="hero--shot__scrim" aria-hidden="true"></span>
+
+    <div class="container hero--shot__inner">
       <div class="eyebrow">Portfolio</div>
       <h1 class="hero__title" data-masked>Selected projects</h1>
       <p class="hero__sub reveal">Residential, commercial and institutional buildings across Nepal — designed, built and handed over.</p>

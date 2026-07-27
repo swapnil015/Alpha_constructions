@@ -2595,3 +2595,77 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 @media (prefers-reduced-motion: reduce) {
   .pg__card { opacity: 1; transform: none; transition: none; }
 }
+
+/* ===========================================================================
+   Photographic hero — full-bleed image behind the copy
+   Used on /projects. Scoped to .hero--shot so other heroes are untouched.
+   =========================================================================== */
+
+.hero--shot {
+  position: relative;
+  min-height: min(72vh, 680px);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: var(--color-surface-2);
+}
+
+/* An <img> rather than a background-image, so it keeps alt text,
+   fetchpriority and intrinsic dimensions for the preload scanner. */
+.hero--shot__img {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* The horizon and the crane line sit above centre; hold them. */
+  object-position: 50% 42%;
+}
+
+/* The photograph is already dark on the left, so the scrim only needs to
+   deepen it enough to carry the copy, then clear to the right. */
+.hero--shot__scrim {
+  position: absolute; inset: 0; z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(to right,
+      rgba(0, 30, 30, .90) 0%, rgba(0, 30, 30, .66) 30%,
+      rgba(0, 30, 30, .26) 58%, rgba(0, 30, 30, .10) 100%),
+    linear-gradient(to bottom,
+      rgba(0, 24, 24, .62) 0%, rgba(0, 24, 24, 0) 28%,
+      rgba(0, 24, 24, 0) 64%, rgba(0, 24, 24, .58) 100%);
+}
+
+.hero--shot__inner {
+  position: relative; z-index: 2;
+  padding-top: clamp(3rem, 8vh, 5rem);
+  padding-bottom: clamp(3rem, 8vh, 5rem);
+}
+
+.hero--shot .hero__title {
+  font-size: clamp(2.6rem, 6vw, 5.25rem);
+  line-height: 1.0;
+  letter-spacing: -.024em;
+  max-width: 11ch;
+  margin: 1.25rem 0 1.5rem;
+  text-shadow: 0 2px 40px rgba(0, 20, 20, .55);
+}
+.hero--shot .hero__sub {
+  max-width: 44ch;
+  margin-bottom: 0;
+  text-shadow: 0 1px 24px rgba(0, 20, 20, .6);
+}
+
+@media (max-width: 760px) {
+  .hero--shot { min-height: 62vh; align-items: flex-end; }
+  .hero--shot__img { object-position: 58% 42%; }
+  /* Portrait crops in tight on the subject, so the copy needs a deeper base. */
+  .hero--shot__scrim {
+    background:
+      linear-gradient(to bottom,
+        rgba(0, 24, 24, .62) 0%, rgba(0, 24, 24, .10) 24%,
+        rgba(0, 24, 24, .60) 62%, rgba(0, 24, 24, .92) 100%);
+  }
+  .hero--shot__inner { padding-bottom: clamp(3rem, 9vh, 4.5rem); }
+  .hero--shot .hero__title { max-width: 10ch; font-size: clamp(2.3rem, 11vw, 3.2rem); }
+  .hero--shot .hero__sub { max-width: none; }
+}
