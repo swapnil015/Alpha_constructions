@@ -2155,3 +2155,229 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 
   .cookie-bar .btn { min-height: 44px; }
 }
+
+/* ===========================================================================
+   Motion layer
+   ---------------------------------------------------------------------------
+   Driven by assets/js/motion.js and assets/js/about.js.
+
+   Every rule here is resting-state neutral: with motion disabled, or before
+   any animation runs, the page renders exactly as it did before. No colour,
+   type, layout or spacing is changed — only transform and opacity.
+   =========================================================================== */
+
+:root {
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* -- MaskedText ------------------------------------------------------------ */
+/* Line boxes clip their contents so text can rise from behind an edge.
+   overflow-y is visible-safe via padding, so descenders are never cut. */
+.mt-line {
+  display: block;
+  overflow: hidden;
+  /* Room for descenders and italic overhang inside the mask. */
+  padding-bottom: .08em;
+  margin-bottom: -.08em;
+}
+.mt-line__in { display: block; will-change: transform; }
+.mt-w { display: inline-block; }
+
+/* -- Section label dividers ------------------------------------------------
+   .eyebrow::before is the little gold rule. GSAP cannot target a pseudo
+   element, so it drives --dash and the pseudo reads it. Default 1 keeps every
+   label that is not animated looking untouched. */
+.eyebrow::before {
+  transform: scaleX(var(--dash, 1));
+  transform-origin: left center;
+}
+
+/* -- Header: hide on scroll down, return on scroll up ---------------------- */
+.site-header {
+  transition:
+    transform .55s var(--motion-ease),
+    padding .3s var(--ease-out),
+    background .3s,
+    box-shadow .3s;
+  will-change: transform;
+}
+.site-header.is-hidden { transform: translate3d(0, -100%, 0); }
+/* Hairline gold edge, only once the header is over content. */
+.site-header.is-scrolled { border-bottom-color: rgba(200, 146, 42, .28); }
+
+/* -- Nav links: gold underline slides in from the left --------------------- */
+.nav-link { position: relative; }
+.nav-link::after {
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: -6px; height: 1px;
+  background: var(--color-accent);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform .3s var(--motion-ease);
+}
+.nav-link:hover::after { transform: scaleX(1); }
+/* The active link keeps its existing underline — no double rule. */
+.nav-link.is-active::after { display: none; }
+
+/* -- Magnetic buttons + diagonal shine sweep ------------------------------- */
+.is-magnetic { position: relative; overflow: hidden; will-change: transform; }
+.is-magnetic > * { position: relative; z-index: 1; }
+.is-magnetic::after {
+  content: "";
+  position: absolute; top: -60%; bottom: -60%; left: -80%;
+  width: 40%;
+  background: linear-gradient(100deg,
+    rgba(255,255,255,0) 0%, rgba(255,255,255,.42) 50%, rgba(255,255,255,0) 100%);
+  transform: skewX(-18deg) translateX(0);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .is-magnetic:hover::after { animation: shineSweep .8s var(--motion-ease) 1; }
+}
+@keyframes shineSweep {
+  from { opacity: 1; transform: skewX(-18deg) translateX(0); }
+  to   { opacity: 1; transform: skewX(-18deg) translateX(520%); }
+}
+
+/* -- Scroll-to-top --------------------------------------------------------- */
+.floater-top {
+  transition: opacity .5s var(--motion-ease), transform .5s var(--motion-ease);
+}
+.floater-top:not(.is-visible) { opacity: 0; transform: scale(.8); pointer-events: none; }
+.floater-top.is-visible { opacity: 1; transform: scale(1); }
+.floater-top svg, .floater-top { will-change: transform; }
+@media (hover: hover) and (pointer: fine) {
+  .floater-top:hover { transform: scale(1) translateY(-3px); }
+}
+
+/* -- Our Story: gold frame that draws itself around the panel -------------- */
+.split__media { position: relative; }
+.split__media-inner { position: absolute; inset: 0; display: block; }
+
+/* Two pseudo elements, four edges: ::before draws top then right,
+   ::after draws bottom then left. */
+.split__media.is-framed::before,
+.split__media.is-framed::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  border-color: var(--color-accent);
+  border-style: solid;
+  border-width: 0;
+}
+.split__media.is-framed::before {
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-top-width: 1px; border-right-width: 1px;
+  clip-path: inset(0 0 0 0);
+  animation: frameTopRight 1.2s var(--motion-ease) forwards;
+}
+.split__media.is-framed::after {
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-bottom-width: 1px; border-left-width: 1px;
+  animation: frameBottomLeft 1.2s var(--motion-ease) .6s forwards;
+  opacity: 0;
+}
+@keyframes frameTopRight {
+  from { clip-path: inset(0 100% 100% 0); }
+  50%  { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+@keyframes frameBottomLeft {
+  from { opacity: 1; clip-path: inset(100% 0 0 100%); }
+  50%  { opacity: 1; clip-path: inset(100% 0 0 0); }
+  to   { opacity: 1; clip-path: inset(0 0 0 0); }
+}
+
+/* -- Cards: border trace + cursor-follow tint ------------------------------ */
+.service-card.is-traced { position: relative; }
+.service-card.is-traced::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  border: 1px solid transparent;
+  transition: border-color .6s var(--motion-ease), box-shadow .6s var(--motion-ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .service-card.is-traced { transition: transform .6s var(--motion-ease); will-change: transform; }
+  .service-card.is-traced:hover { transform: translateY(-6px); }
+  .service-card.is-traced:hover::after {
+    border-color: rgba(200, 146, 42, .55);
+    box-shadow: 0 0 22px rgba(200, 146, 42, .16) inset;
+  }
+
+  /* Leadership portraits scale inside their clipped frame. */
+  .service-card.is-person .person__media { overflow: hidden; }
+  .service-card.is-person .person__img {
+    position: absolute; inset: 0; display: block;
+    transition: transform .6s var(--motion-ease);
+  }
+  .service-card.is-person:hover .person__img { transform: scale(1.05); }
+
+  /* Gold rule draws under the name. */
+  .person__name { position: relative; display: inline-block; }
+  .person__name::after {
+    content: "";
+    position: absolute; left: 0; right: 0; bottom: -4px; height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform .5s var(--motion-ease);
+  }
+  .service-card.is-person:hover .person__name::after { transform: scaleX(1); }
+  .person__role { transition: color .5s var(--motion-ease); }
+  .service-card.is-person:hover .person__role { color: var(--color-accent); }
+}
+
+/* -- Process cards --------------------------------------------------------- */
+.service-card.is-step { position: relative; }
+.service-card.is-step .why-item__num { will-change: transform, opacity, filter; }
+.service-card.is-step::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform .55s var(--motion-ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .service-card.is-step:hover::before { transform: scaleX(1); }
+  .service-card.is-step .why-item__num { transition: color .5s var(--motion-ease); }
+  .service-card.is-step:hover .why-item__num { color: var(--color-accent); }
+}
+
+/* Vertical progress rule down the left of the process section. */
+.about-process { position: relative; }
+.about-process__rail {
+  position: absolute; left: clamp(.75rem, 2vw, 1.75rem);
+  top: 0; bottom: 0; width: 1px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+.about-process__rail > span {
+  display: block; width: 100%; height: 100%;
+  background: var(--color-accent);
+  transform: scaleY(0); transform-origin: top center;
+}
+@media (max-width: 900px) { .about-process__rail { display: none; } }
+
+/* -- Stats: dividers grow from zero height --------------------------------- */
+.stats-grid .stat { position: relative; }
+.stats-grid .stat + .stat::before {
+  content: "";
+  position: absolute; left: 0; top: 10%; bottom: 10%; width: 1px;
+  background: var(--color-border);
+  transform: scaleY(var(--rule, 1)); transform-origin: top center;
+}
+@media (max-width: 760px) { .stats-grid .stat + .stat::before { display: none; } }
+
+/* ---------------------------------------------------------------------------
+   Reduced motion — show everything instantly, move nothing.
+   --------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .mt-line__in { transform: none !important; }
+  .site-header, .site-header.is-hidden { transform: none !important; transition: none; }
+  .is-magnetic::after { animation: none !important; opacity: 0 !important; }
+  .split__media.is-framed::before,
+  .split__media.is-framed::after { animation: none !important; clip-path: none !important; opacity: 1; }
+  .service-card.is-traced, .person__img, .floater-top { transition: none !important; }
+  .about-process__rail > span { transform: scaleY(1); }
+  .stats-grid .stat + .stat::before { transform: scaleY(1); }
+}

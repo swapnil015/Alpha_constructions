@@ -116,7 +116,8 @@
   // ---------------------------------------------------------------------
   const top = document.querySelector('.floater-top');
   if (top) {
-    window.addEventListener('scroll', () => top.classList.toggle('is-visible', window.scrollY > 400), { passive: true });
+    // Visibility is owned by motion.js (600px threshold). Two listeners
+    // toggling the same class at different thresholds fight between them.
     top.addEventListener('click', () => {
       if (window.__lenis) window.__lenis.scrollTo(0, { duration: 2.4 });
       else window.scrollTo({ top: 0, behavior: 'smooth' });

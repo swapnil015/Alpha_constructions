@@ -79,6 +79,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js" defer></script>
 <script src="<?= asset('assets/js/main.js') ?>"></script>
+<?php /* Shared motion primitives + site chrome (nav, CTA, header, scroll-top). */ ?>
+<script src="<?= asset('assets/js/motion.js') ?>"></script>
 <?php /* Per-page scripts — a view sets $page_scripts before including this. */ ?>
 <?= $page_scripts ?? '' ?>
 </body>
