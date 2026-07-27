@@ -648,9 +648,13 @@
 
         <div class="cp__media">
           <div class="cp__zoom">
-                          <img class="cp__still" src="/assets/img/story/apartment-facade.jpg?v=1785132710"
-                   alt="Imperial Apartment, Naxal, Kathmandu"
-                   loading="lazy" decoding="async" width="1600" height="900">
+                          <!-- src is set by projects.js once the panel nears the viewport,
+                   so the file is never fetched for visitors who never reach it. -->
+              <video class="cp__video" data-cp-video
+                     data-src="/assets/video/imperial-apartment.mp4?v=1785161112"
+                     poster="/assets/video/imperial-apartment.jpg?v=1785161112"
+                     muted loop playsinline preload="metadata"
+                     aria-label="Imperial Apartment film"></video>
                       </div>
           <span class="cp__scrim" aria-hidden="true"></span>
         </div>

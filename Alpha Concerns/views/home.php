@@ -342,9 +342,8 @@ $page_scripts =
    * table: Budhanilkantha Heights is not a row in that table yet, and this
    * section is deliberately a curated pair rather than "whatever is featured".
    *
-   * `video` is preferred; `image` is the fallback for a project with no film
-   * yet. Imperial Apartment has none — its DB hero_image points at
-   * /uploads/projects/imperial-apartment/hero.jpg, which does not exist.
+   * `video` is preferred; `poster` doubles as the still fallback for a
+   * project with no film.
    */
   $cpDefaults = [
       1 => [
@@ -353,8 +352,8 @@ $page_scripts =
           'category' => 'Residential',
           'location' => 'Naxal, Kathmandu',
           'status'   => 'Ongoing',
-          'video'    => null,
-          'poster'   => asset('assets/img/story/apartment-facade.jpg'),
+          'video'    => asset('assets/video/imperial-apartment.mp4'),
+          'poster'   => asset('assets/video/imperial-apartment.jpg'),
       ],
       2 => [
           'slug'     => 'budhanilkantha-heights',
@@ -364,6 +363,9 @@ $page_scripts =
           'status'   => 'Ongoing',
           'video'    => asset('assets/video/budhanilkantha-heights.mp4'),
           'poster'   => asset('assets/video/budhanilkantha-heights.jpg'),
+          // This film carries burned-in captions along its bottom edge; the
+          // .is-film CSS lifts the overlay clear of them.
+          'captioned' => true,
       ],
   ];
   // Every field is editable in /admin/homepage; empty settings keep the defaults.
@@ -377,6 +379,7 @@ $page_scripts =
           'status'   => setting("cp{$n}_status",   $d['status']),
           'video'    => setting("cp{$n}_video")    ?: $d['video'],
           'poster'   => setting("cp{$n}_poster")   ?: $d['poster'],
+          'captioned' => !empty($d['captioned']),
       ];
   }
   ?>
@@ -392,7 +395,7 @@ $page_scripts =
 
     <div class="cp__panels">
       <?php foreach ($currentProjects as $i => $p): ?>
-      <article class="cp__panel<?= $p['video'] ? ' is-film' : '' ?>" data-cp-panel="<?= $i ?>">
+      <article class="cp__panel<?= $p['captioned'] ? ' is-film' : '' ?>" data-cp-panel="<?= $i ?>">
 
         <div class="cp__media">
           <div class="cp__zoom">
