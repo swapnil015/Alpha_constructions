@@ -1722,14 +1722,15 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 
 /* ===========================================================================
    Why Alpha Concern — staggered glass timeline (home)
-   Driven by assets/js/why.js.
+   Six cards alternating left/right, linked by a stepped gold connector that
+   draws itself with scroll. Driven by assets/js/why.js.
    =========================================================================== */
 
 .why {
   --why-bg:    #063B38;
   --why-ink:   #F7F4ED;
   --why-gold:  #D4A84A;
-  --why-muted: rgba(247, 244, 237, .62);
+  --why-muted: rgba(247, 244, 237, .60);
   --why-glass: rgba(255, 255, 255, .03);
   --why-edge:  rgba(212, 168, 74, .18);
 
@@ -1744,6 +1745,8 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 /* -- Background ------------------------------------------------------------ */
 .why__bg { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 
+/* Two grid densities plus diagonals reads as drafting linework rather than
+   graph paper. */
 .why__blueprint {
   position: absolute; inset: -20%;
   opacity: .03;
@@ -1751,59 +1754,59 @@ textarea.form-control { min-height: 150px; resize: vertical; }
     linear-gradient(to right,  var(--why-ink) 1px, transparent 1px),
     linear-gradient(to bottom, var(--why-ink) 1px, transparent 1px),
     linear-gradient(to right,  var(--why-ink) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--why-ink) 1px, transparent 1px);
-  background-size: 132px 132px, 132px 132px, 33px 33px, 33px 33px;
+    linear-gradient(to bottom, var(--why-ink) 1px, transparent 1px),
+    repeating-linear-gradient(45deg, var(--why-ink) 0 1px, transparent 1px 220px);
+  background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px, auto;
   animation: whyDrift 90s linear infinite;
   will-change: transform;
 }
 @keyframes whyDrift {
   from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-132px, -132px, 0); }
+  to   { transform: translate3d(-160px, -160px, 0); }
 }
 
-/* Soft pool of light behind the heading. */
 .why__glow {
   position: absolute; inset: 0;
-  background: radial-gradient(46% 38% at 50% 16%, rgba(212, 168, 74, .12), transparent 68%);
+  background:
+    radial-gradient(42% 34% at 50% 14%, rgba(212, 168, 74, .13), transparent 68%),
+    radial-gradient(70% 60% at 50% 50%, rgba(9, 74, 68, .55), transparent 72%);
 }
 
 /* -- Header ---------------------------------------------------------------- */
 .why__head {
   position: relative; z-index: 2;
-  max-width: 1400px; margin: 0 auto clamp(4rem, 10vh, 7rem);
+  max-width: 1400px; margin: 0 auto clamp(3.5rem, 9vh, 6rem);
   text-align: center;
 }
 
 .why__eyebrow {
-  display: inline-flex; align-items: center; gap: 1rem;
-  font-family: var(--font-body); font-weight: 500;
-  font-size: .7rem; letter-spacing: .34em; text-transform: uppercase;
+  font-family: var(--font-body); font-weight: 600;
+  font-size: .68rem; letter-spacing: .34em; text-transform: uppercase;
   color: var(--why-gold);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
-.why__eyebrow::before,
-.why__eyebrow::after { content: ""; width: 2.2rem; height: 1px; background: var(--why-gold); opacity: .6; }
+/* Short rule centred beneath the label. */
+.why__eyebrow::after {
+  content: ""; display: block;
+  width: 26px; height: 1px; margin: 1.1rem auto 0;
+  background: var(--why-gold); opacity: .7;
+}
 
 .why__title {
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  font-size: clamp(2.2rem, 5.4vw, 4.6rem);
   line-height: 1.06; letter-spacing: -.02em;
   color: var(--why-ink);
-  margin: 0 auto 1.5rem;
-  max-width: 20ch;
+  margin: 0 auto 1.4rem;
+  max-width: 18ch;
 }
-/* Characters ride out of a clipped word box during the reveal. */
 .why__word { display: inline-block; overflow: hidden; vertical-align: bottom; }
 .why__char { display: inline-block; will-change: transform, opacity; }
 
 .why__statement {
-  margin: 0 auto;
-  max-width: 42ch;
-  font-size: clamp(1rem, 1.3vw, 1.12rem);
-  line-height: 1.8;
-  color: var(--why-muted);
-  font-style: italic;
-  font-family: var(--font-display);
+  margin: 0 auto; max-width: 44ch;
+  font-size: clamp(.95rem, 1.2vw, 1.05rem);
+  line-height: 1.8; color: var(--why-muted);
 }
 
 /* -- Timeline -------------------------------------------------------------- */
@@ -1812,76 +1815,83 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   max-width: 1400px; margin: 0 auto;
 }
 
-/* Track and its gold fill, centred on desktop. */
-.why__line {
-  position: absolute; top: 0; bottom: 0; left: 50%;
-  width: 1px; transform: translateX(-50%);
-  background: rgba(247, 244, 237, .09);
+/* -- Connector ------------------------------------------------------------- */
+.why__wire {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 0;
 }
-.why__lineFill {
-  display: block; width: 100%; height: 100%;
-  background: var(--why-gold);
-  transform: scaleY(0); transform-origin: top center;
-  box-shadow: 0 0 12px rgba(212, 168, 74, .55);
+.why__wireTrack {
+  stroke: rgba(212, 168, 74, .14);
+  stroke-width: 1;
+}
+.why__wireFill {
+  stroke: var(--why-gold);
+  stroke-width: 1.25;
+  filter: drop-shadow(0 0 5px rgba(212, 168, 74, .65));
+}
+/* Short dash chased along the same path — the travelling spark. */
+.why__wireSpark {
+  stroke: #FFF0C4;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(212, 168, 74, .95));
 }
 
-/* Dot runs ahead of the fill. */
-.why__dot {
-  position: absolute; top: 0; left: 50%;
-  width: 9px; height: 9px; margin: -4px 0 0 -4px;
-  border-radius: 50%;
-  background: var(--why-gold);
-  box-shadow: 0 0 0 5px rgba(212, 168, 74, .14), 0 0 16px rgba(212, 168, 74, .8);
-  will-change: transform;
+.why__joint {
+  fill: var(--why-bg);
+  stroke: rgba(212, 168, 74, .35);
+  stroke-width: 1;
+  transition: stroke .5s var(--ease-out), fill .5s var(--ease-out), r .5s var(--ease-out);
+}
+.why__joint.is-active {
+  fill: var(--why-gold);
+  stroke: var(--why-gold);
+  filter: drop-shadow(0 0 7px rgba(212, 168, 74, .9));
 }
 
-.why__list { display: grid; gap: clamp(2.5rem, 7vh, 5rem); }
+/* -- Rows ------------------------------------------------------------------ */
+.why__list { display: grid; gap: clamp(1.5rem, 4vh, 3rem); }
 
 .why__row {
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  column-gap: clamp(2rem, 6vw, 6rem);
   align-items: center;
 }
-.why__row--left  > .why__card,
-.why__row--left  > .why__num { grid-column: 1; }
-.why__row--right > .why__card,
-.why__row--right > .why__num { grid-column: 2; }
+.why__row--left  > .why__card, .why__row--left  > .why__num { grid-column: 1; }
+.why__row--right > .why__card, .why__row--right > .why__num { grid-column: 2; }
 
-/* Node where the row meets the line. */
-.why__node {
-  position: absolute; left: 50%; top: 50%;
-  width: 11px; height: 11px; margin: -5.5px 0 0 -5.5px;
-  border-radius: 50%;
-  border: 1px solid var(--why-edge);
-  background: var(--why-bg);
-  transition: border-color .5s var(--ease-out), box-shadow .5s var(--ease-out);
-}
-.why__row.is-active .why__node {
-  border-color: var(--why-gold);
-  box-shadow: 0 0 14px rgba(212, 168, 74, .7);
-}
+/* Right-hand cards mirror their alignment, as in the reference. */
+.why__row--right .why__copy { text-align: right; }
 
 /* -- Number ---------------------------------------------------------------- */
-/* Sits behind the glass, peeking past the card's top corner. Screen blending
-   turns it into part of the surface rather than a label sitting on top. */
+/* Sits behind the glass, breaking past the card's outer top corner. Screen
+   blending makes it part of the surface rather than a label on top of it. */
 .why__num {
   position: absolute; z-index: 0;
-  top: -34px;
+  top: -42px;
   font-family: var(--font-display); font-weight: 300;
-  font-size: 72px; line-height: 1;
+  font-size: clamp(64px, 7vw, 104px); line-height: .8;
   color: var(--why-gold);
   opacity: .18;
   mix-blend-mode: screen;
   pointer-events: none;
   transition: opacity .5s var(--ease-out), text-shadow .5s var(--ease-out);
 }
-.why__row--left  > .why__num { left: 8px; }
-.why__row--right > .why__num { right: 8px; }
+.why__row--left  > .why__num { left: 26px; }
+.why__row--right > .why__num { right: 26px; }
 
 /* -- Card ------------------------------------------------------------------ */
 .why__card {
   position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: clamp(1.25rem, 2.4vw, 2.25rem);
   padding: 40px;
   border-radius: 24px;
   border: 1px solid var(--why-edge);
@@ -1897,24 +1907,24 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 }
 
 .why__icon {
-  width: 34px; height: 34px;
+  width: 56px; height: 56px;
   color: var(--why-gold);
-  margin-bottom: 1.5rem;
+  flex: none;
   transition: transform .5s var(--ease-out), filter .5s var(--ease-out);
 }
 
 .why__cardTitle {
   font-family: var(--font-heading); font-weight: 600;
-  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  font-size: clamp(1.05rem, 1.4vw, 1.3rem);
   letter-spacing: -.01em;
   color: var(--why-ink);
-  margin: 0 0 .9rem;
+  margin: 0 0 .7rem;
   transition: transform .5s var(--ease-out);
 }
 
 .why__cardDesc {
   margin: 0;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.8;
   color: var(--why-muted);
   transition: color .5s var(--ease-out);
@@ -1926,55 +1936,56 @@ textarea.form-control { min-height: 150px; resize: vertical; }
     transform: translateY(-10px) scale(1.02);
     border-color: rgba(212, 168, 74, .55);
     box-shadow:
-      0 26px 60px rgba(0, 0, 0, .32),
-      0 0 0 1px rgba(212, 168, 74, .18),
+      0 26px 60px rgba(0, 0, 0, .34),
+      0 0 0 1px rgba(212, 168, 74, .16),
       inset 0 1px 0 rgba(255, 255, 255, .06);
   }
   .why__card:hover .why__icon {
     transform: rotate(6deg) scale(1.08);
-    filter: drop-shadow(0 0 8px rgba(212, 168, 74, .55));
+    filter: drop-shadow(0 0 9px rgba(212, 168, 74, .6));
   }
   .why__card:hover .why__cardTitle { transform: translateY(-4px); }
   .why__card:hover .why__cardDesc  { color: rgba(247, 244, 237, .86); }
   .why__row:hover .why__num {
     opacity: .3;
-    text-shadow: 0 0 26px rgba(212, 168, 74, .55);
+    text-shadow: 0 0 30px rgba(212, 168, 74, .6);
   }
 }
 
 /* -- Tablet ---------------------------------------------------------------- */
 @media (max-width: 1024px) {
-  .why__card { padding: 32px; }
-  .why__num  { font-size: 58px; top: -28px; }
+  .why__card { padding: 30px; gap: 1.25rem; }
+  .why__icon { width: 46px; height: 46px; }
+  .why__num  { font-size: 62px; top: -32px; }
 }
 
 /* ---------------------------------------------------------------------------
-   Mobile — the zig-zag collapses to a single column with the line down the
-   left. A two-column stagger below ~760px leaves each card too narrow to read.
+   Mobile — the zig-zag collapses to a single column with the wire down the
+   left gutter. A two-column stagger below ~760px leaves cards too narrow.
+   why.js anchors the connector to x=14 at this breakpoint to match.
    --------------------------------------------------------------------------- */
 @media (max-width: 760px) {
-  .why__line,
-  .why__dot { left: 14px; }
+  .why__row { grid-template-columns: 1fr; padding-left: 46px; }
+  .why__row--left  > .why__card, .why__row--right > .why__card,
+  .why__row--left  > .why__num,  .why__row--right > .why__num { grid-column: 1; }
+  .why__row--right .why__copy { text-align: left; }
 
-  .why__row { grid-template-columns: 1fr; }
-  .why__row--left  > .why__card,
-  .why__row--right > .why__card,
-  .why__row--left  > .why__num,
-  .why__row--right > .why__num { grid-column: 1; }
+  .why__num { font-size: 46px; top: -20px; left: 60px; right: auto; }
 
-  .why__row { padding-left: 44px; }
-  .why__node { left: 14px; top: 34px; }
+  .why__card { padding: 22px; border-radius: 18px; gap: 1rem; grid-template-columns: auto 1fr; }
+  .why__icon { width: 38px; height: 38px; }
+  .why__cardDesc { font-size: 15px; }
+}
 
-  .why__num { font-size: 46px; top: -22px; left: 48px; right: auto; }
-  .why__card { padding: 26px; border-radius: 20px; }
-  .why__cardDesc { font-size: 16px; }
+@media (max-width: 460px) {
+  /* Below this the icon and text side by side leaves ~150px for the copy. */
+  .why__card { grid-template-columns: 1fr; gap: 1rem; }
 }
 
 /* -- No JS / reduced motion ------------------------------------------------- */
-/* The line and dot are scroll-driven; with nothing to drive them a bare track
-   and a stranded dot would just look broken. */
-.why.is-static .why__line,
-.why.is-static .why__dot { display: none; }
+/* The connector is scroll-driven; an undrawn track and a stranded spark just
+   look broken, so hide the whole thing. */
+.why.is-static .why__wire { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .why__blueprint { animation: none; }
