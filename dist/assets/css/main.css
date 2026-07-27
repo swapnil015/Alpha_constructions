@@ -1202,7 +1202,11 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 .svc__railItem.is-active { color: var(--svc-gold); transform: scale(1.18); }
 
 /* -- Items ----------------------------------------------------------------- */
-.svc__items { position: relative; width: 100%; }
+/* Must fill the stage. Every child is absolutely positioned, so a relatively
+   positioned wrapper would collapse to zero height — items would then resolve
+   `inset: 0` against nothing and centre inside a 0px box, dropping the whole
+   composition below the fold. */
+.svc__items { position: absolute; inset: 0; }
 
 .svc__item {
   position: absolute; inset: 0;
@@ -1210,7 +1214,13 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   grid-template-columns: 40% 60%;
   align-items: center;
   gap: clamp(1.5rem, 4vw, 4rem);
-  padding: 0 clamp(3.5rem, 7vw, 7rem) 0 clamp(4.5rem, 8vw, 8rem);
+  /* Vertical padding clears the eyebrow above and the "all services" link
+     below, so content centres in the space that is actually free. */
+  padding:
+    clamp(5.5rem, 13vh, 8rem)
+    clamp(3.5rem, 7vw, 7rem)
+    clamp(4.5rem, 11vh, 6.5rem)
+    clamp(4.5rem, 8vw, 8rem);
   opacity: 0;
   pointer-events: none;
 }
@@ -1243,6 +1253,10 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   color: var(--svc-ink);
   margin: 0 0 1.15rem;
   will-change: transform, opacity;
+  /* Some titles wrap to two lines, some to one — a 48px swing that would move
+     the whole centred block between services. Reserve two lines so the number,
+     title and CTA hold the same position on all six. */
+  min-height: calc(1.04em * 2);
 }
 
 .svc__desc {
@@ -1251,6 +1265,10 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   font-size: clamp(.92rem, 1.15vw, 1.02rem);
   line-height: 1.75;
   color: var(--svc-muted);
+  /* Descriptions run two or three lines. Reserving three keeps the number,
+     title and CTA at exactly the same height on every service, so nothing
+     jumps as the user steps through them. */
+  min-height: calc(1.75em * 3);
 }
 .svc__word { display: inline-block; will-change: transform, opacity; }
 
@@ -1276,9 +1294,14 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 /* -- Media ----------------------------------------------------------------- */
 .svc__media {
   position: relative;
+  width: 100%;
   border-radius: var(--svc-radius);
   overflow: hidden;
   aspect-ratio: 16 / 10;
+  /* On short or very wide viewports 16:10 of a 60% column is taller than the
+     stage. Clamp it and let object-fit crop rather than overflow the pin. */
+  max-height: 100%;
+  align-self: center;
   box-shadow: 0 40px 90px rgba(0, 0, 0, .45);
   will-change: transform;            /* mouse parallax */
   transition: filter .6s var(--ease-out), box-shadow .6s var(--ease-out);
@@ -1391,8 +1414,10 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   .svc__figure img { transform: none !important; }   /* no Ken Burns on mobile */
 
   .svc__num   { font-size: 3.4rem; margin-bottom: .1em; }
-  .svc__title { font-size: clamp(1.5rem, 6vw, 2rem); }
-  .svc__desc  { max-width: none; margin-bottom: 1.4rem; }
+  .svc__title { font-size: clamp(1.5rem, 6vw, 2rem); min-height: 0; }
+  /* Cards are independent in the scroller, so reserving a third line here
+     would just add dead space. */
+  .svc__desc  { max-width: none; margin-bottom: 1.4rem; min-height: 0; }
 
   .svc__rail {
     left: 50%; top: auto; bottom: 0;

@@ -42,8 +42,12 @@
     words.forEach(function (w, i) {
       var span = document.createElement('span');
       span.className = 'svc__word';
-      span.textContent = w + (i < words.length - 1 ? ' ' : '');
+      span.textContent = w;
       p.appendChild(span);
+      // The separator must be a text node BETWEEN the spans. A trailing space
+      // inside an inline-block is collapsed away, which runs every word
+      // together.
+      if (i < words.length - 1) p.appendChild(document.createTextNode(' '));
     });
   });
 
