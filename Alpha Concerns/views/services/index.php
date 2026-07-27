@@ -4,22 +4,25 @@ partial('header');
 $services = db_all("SELECT * FROM services WHERE is_active=1 ORDER BY sort_order");
 ?>
 <main id="main">
-  <!-- Full-bleed photographic hero: the site photograph fills the viewport,
-       copy sits over it against a scrim. -->
-  <section class="hero hero--photo">
-    <img class="hero--photo__img"
-         src="<?= asset('assets/img/hero/services-prajwal-residency.jpg') ?>"
-         alt="Prajwal Residency under construction — RCC frame above the Kathmandu valley."
-         width="1200" height="1600" fetchpriority="high" decoding="async">
-    <span class="hero--photo__scrim" aria-hidden="true"></span>
-
-    <div class="container hero--photo__inner">
-      <div class="eyebrow">Services</div>
-      <h1 class="hero__title" data-masked>What we build</h1>
-      <p class="hero__sub reveal">A complete construction practice — from structural engineering to interior finishing.</p>
+  <!-- Split hero: copy left, graded site photograph bleeding off the right. -->
+  <section class="hero hero--split">
+    <div class="hero__bg"></div>
+    <div class="hero--split__inner">
+      <div class="hero--split__copy">
+        <div class="eyebrow">Services</div>
+        <h1 class="hero__title" data-masked>What we build</h1>
+        <p class="hero__sub reveal">A complete construction practice — from structural engineering to interior finishing.</p>
+        <a class="hero--split__scroll" href="#services-list">Scroll to explore</a>
+      </div>
+      <figure class="hero--split__media">
+        <img src="<?= asset('assets/img/hero/services-prajwal-residency.jpg') ?>"
+             alt="Prajwal Residency under construction — RCC frame above the Kathmandu valley."
+             width="1200" height="1600" fetchpriority="high" decoding="async">
+        <span class="hero--split__grade" aria-hidden="true"></span>
+        <span class="hero--split__scrim" aria-hidden="true"></span>
+        <span class="hero--split__frame" aria-hidden="true"></span>
+      </figure>
     </div>
-
-    <a class="hero--photo__scroll" href="#services-list">Scroll to explore</a>
   </section>
   <section class="section section--cream" id="services-list">
     <div class="container">

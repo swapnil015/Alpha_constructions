@@ -2394,112 +2394,151 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 }
 
 /* ===========================================================================
-   Photographic hero — image fills the viewport, copy sits over it
-   Used on /services. Scoped to .hero--photo so every other hero is untouched.
+   Split hero — copy left, graded photograph bleeding off the right edge
+   Used on /services. Scoped to .hero--split so every other hero is untouched.
+
+   The grade: the raw photograph is hazy daylight and reads flat against the
+   emerald theme. Three layers sit over a filtered <img> —
+     1. filter on the img itself: contrast up, haze down, slightly desaturated
+        so the site's palette leads;
+     2. .hero--split__grade: an emerald-shadow / gold-highlight duotone wash,
+        blended so shadows cool toward the brand green and highlights warm
+        toward the accent gold;
+     3. .hero--split__scrim: the legibility gradient into the left column;
+   plus a hairline gold frame inset over the picture.
    =========================================================================== */
 
-.hero--photo {
-  position: relative;
-  /* Full view, minus the sticky header stack so nothing hides behind it. */
-  min-height: calc(100svh - var(--header-stack));
+.hero--split {
+  min-height: min(78vh, 760px);
   padding: 0;
-  display: flex;
-  align-items: center;
+  display: block;
   overflow: hidden;
-  background: var(--color-surface-2);
 }
 
-/* The photograph itself, not a background-image: it can then carry alt text,
-   fetchpriority and intrinsic dimensions, so it is discoverable by the
-   preload scanner and reserves no layout. */
-.hero--photo__img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  /* Portrait source in a landscape frame crops top and bottom heavily; bias
-     upward to hold the building and the valley rather than the gravel. */
-  object-position: 50% 34%;
-  z-index: 0;
-}
-
-/* Scrim: strong enough on the left for the copy, clearing to the right so the
-   photograph is still read as the subject. */
-.hero--photo__scrim {
-  position: absolute; inset: 0; z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(to right,
-      rgba(0, 30, 30, .92) 0%, rgba(0, 30, 30, .72) 26%,
-      rgba(0, 30, 30, .34) 52%, rgba(0, 30, 30, .18) 100%),
-    linear-gradient(to bottom,
-      rgba(0, 24, 24, .70) 0%, rgba(0, 24, 24, 0) 26%,
-      rgba(0, 24, 24, 0) 62%, rgba(0, 24, 24, .62) 100%);
-}
-
-.hero--photo__inner {
+.hero--split__inner {
   position: relative; z-index: 2;
-  padding-top: clamp(3rem, 8vh, 6rem);
-  padding-bottom: clamp(4rem, 10vh, 7rem);
+  min-height: inherit;
+  display: grid;
+  grid-template-columns: 46% 54%;
+  align-items: center;
 }
 
-/* Sized for a hero that now has the full width to itself, but still held to a
-   measure so it never runs across the photograph's focal point. */
-.hero--photo .hero__title {
-  font-size: clamp(2.8rem, 7vw, 6rem);
+.hero--split__copy {
+  position: relative;
+  padding: clamp(4rem, 9vh, 6rem) clamp(2rem, 4vw, 4rem)
+           clamp(5rem, 11vh, 7rem) max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
+}
+
+/* Sized for a 46% column; the shared .hero__title measure is built for a
+   full-width hero and would stack thin and tall here. */
+.hero--split .hero__title {
+  font-size: clamp(2.6rem, 5vw, 4.75rem);
   line-height: 1.0;
-  letter-spacing: -.025em;
-  max-width: 11ch;
+  letter-spacing: -0.022em;
+  max-width: 9ch;
   margin: 1.25rem 0 1.5rem;
-  /* Lifts the type off a busy photograph without a heavy box behind it. */
-  text-shadow: 0 2px 40px rgba(0, 20, 20, .5);
 }
-.hero--photo .hero__sub {
-  max-width: 44ch;
-  margin-bottom: 0;
-  text-shadow: 0 1px 24px rgba(0, 20, 20, .55);
-}
+.hero--split .hero__sub { max-width: 40ch; margin-bottom: 0; }
 
-/* -- Scroll cue ------------------------------------------------------------ */
-.hero--photo__scroll {
-  position: absolute; z-index: 2;
+/* Scroll cue, sitting under the copy on the page grid. */
+.hero--split__scroll {
+  position: absolute;
   left: max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
-  bottom: clamp(1.75rem, 5vh, 3rem);
+  bottom: clamp(1.75rem, 4.5vh, 3rem);
   display: inline-flex; align-items: center; gap: .9rem;
   font-family: var(--font-body); font-weight: 500;
-  font-size: .68rem; letter-spacing: .3em; text-transform: uppercase;
+  font-size: .66rem; letter-spacing: .3em; text-transform: uppercase;
   color: var(--color-text-muted);
   transition: color .45s var(--ease-out);
 }
-.hero--photo__scroll::before {
+.hero--split__scroll::before {
   content: ""; width: 46px; height: 1px; background: var(--color-accent);
   transform-origin: left center;
   animation: heroCue 2.6s ease-in-out infinite;
 }
-.hero--photo__scroll:hover { color: var(--color-ink); }
+.hero--split__scroll:hover { color: var(--color-ink); }
 @keyframes heroCue {
   0%, 100% { transform: scaleX(.35); opacity: .45; }
   50%      { transform: scaleX(1);   opacity: 1; }
 }
 
-/* -- Mobile ---------------------------------------------------------------- */
+/* -- Media ------------------------------------------------------------------ */
+.hero--split__media {
+  position: relative;
+  margin: 0;
+  align-self: stretch;
+  overflow: hidden;
+  /* Grounds the panel while the (large) image streams in. */
+  background: var(--color-surface-2);
+}
+
+/* Absolute, so the portrait source cannot drive the row height. */
+.hero--split__media img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: 50% 38%;
+  display: block;
+  /* Layer 1 of the grade — cut the atmospheric haze, let the palette lead. */
+  filter: contrast(1.13) saturate(.82) brightness(.94);
+}
+
+/* Layer 2 — duotone wash: emerald shadows, gold highlights. */
+.hero--split__grade {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(160deg, rgba(200, 146, 42, .18) 0%, rgba(200, 146, 42, 0) 42%),
+    linear-gradient(20deg,  rgba(0, 48, 48, .55) 0%,  rgba(0, 48, 48, 0) 55%);
+  mix-blend-mode: soft-light;
+}
+
+/* Layer 3 — legibility scrim, folding the panel into the page. */
+.hero--split__scrim {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to right, var(--color-primary) 0%, rgba(0, 48, 48, .55) 14%, rgba(0, 48, 48, 0) 46%),
+    linear-gradient(to bottom, rgba(0, 30, 30, .5) 0%, rgba(0, 30, 30, 0) 24%),
+    linear-gradient(to top, rgba(0, 30, 30, .55) 0%, rgba(0, 30, 30, 0) 30%),
+    radial-gradient(120% 90% at 70% 45%, transparent 55%, rgba(0, 24, 24, .32) 100%);
+}
+
+/* Hairline gold frame, inset over the picture. */
+.hero--split__frame {
+  position: absolute;
+  inset: clamp(1rem, 2.2vw, 1.75rem);
+  pointer-events: none;
+  border: 1px solid rgba(200, 146, 42, .34);
+}
+
+/* -- Tablet ----------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .hero--split__inner { grid-template-columns: 52% 48%; }
+  .hero--split .hero__title { max-width: 8ch; }
+}
+
+/* -- Mobile: photo above, copy below ---------------------------------------- */
 @media (max-width: 760px) {
-  .hero--photo { min-height: calc(100svh - 64px); }
-  .hero--photo__img { object-position: 50% 32%; }
-  /* Portrait viewport shows much more of the photograph, so the copy needs a
-     deeper base to stay legible. */
-  .hero--photo__scrim {
-    background:
-      linear-gradient(to bottom,
-        rgba(0, 24, 24, .68) 0%, rgba(0, 24, 24, .18) 26%,
-        rgba(0, 24, 24, .55) 62%, rgba(0, 24, 24, .90) 100%);
+  .hero--split { min-height: 0; }
+  .hero--split__inner {
+    grid-template-columns: 1fr;
+    grid-template-areas: "media" "copy";
   }
-  .hero--photo { align-items: flex-end; }
-  .hero--photo__inner { padding-bottom: clamp(5rem, 14vh, 7rem); }
-  .hero--photo .hero__title { font-size: clamp(2.4rem, 12vw, 3.4rem); max-width: 10ch; }
-  .hero--photo .hero__sub { max-width: none; }
-  .hero--photo__scroll { left: var(--gutter); bottom: 1.5rem; }
+  .hero--split__media { grid-area: media; height: 46vh; }
+  .hero--split__scrim {
+    background:
+      linear-gradient(to bottom, rgba(0, 30, 30, .5) 0%, rgba(0, 30, 30, 0) 30%),
+      linear-gradient(to top, var(--color-primary) 0%, rgba(0, 48, 48, 0) 38%);
+  }
+  .hero--split__frame { inset: .9rem; }
+  .hero--split__copy {
+    grid-area: copy;
+    padding: 2rem var(--gutter) clamp(4rem, 9vh, 5rem);
+  }
+  .hero--split .hero__title { max-width: 12ch; font-size: clamp(2.2rem, 10vw, 3rem); }
+  .hero--split .hero__sub { max-width: none; }
+  .hero--split__scroll { left: var(--gutter); bottom: 1.4rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero--photo__scroll::before { animation: none; transform: scaleX(1); opacity: 1; }
+  .hero--split__scroll::before { animation: none; transform: scaleX(1); opacity: 1; }
 }
