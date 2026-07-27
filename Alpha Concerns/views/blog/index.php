@@ -14,8 +14,9 @@ $lead = $posts ? array_shift($posts) : null;
 ?>
 <main id="main">
   <section class="hero hero--shot pg-hero">
-    <img class="hero--shot__img" src="<?= asset('assets/img/hero/projects-site.jpg') ?>"
-         alt="Engineers on site at sunset." width="1672" height="941" fetchpriority="high" decoding="async">
+    <img class="hero--shot__img" src="<?= asset('assets/img/hero/insights-outlook.jpg') ?>"
+         alt="An architect holding drawings, looking out over the city from a concrete and glass terrace."
+         width="1672" height="941" fetchpriority="high" decoding="async">
     <span class="hero--shot__scrim" aria-hidden="true"></span>
     <div class="container hero__inner hero--shot__inner">
       <div class="eyebrow">Insights</div>
