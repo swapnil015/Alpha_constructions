@@ -2542,3 +2542,56 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 @media (prefers-reduced-motion: reduce) {
   .hero--split__scroll::before { animation: none; transform: scaleX(1); opacity: 1; }
 }
+
+/* -- Project status badges --------------------------------------------------
+   Only "completed" had a variant; the portfolio now also carries ongoing and
+   upcoming, which fell back to solid gold and read identically. */
+.project-card__badge--ongoing  { background: var(--color-accent); color: var(--color-primary); }
+.project-card__badge--upcoming { background: transparent; color: var(--color-ink); border: 1px solid var(--color-border-strong); }
+
+/* ===========================================================================
+   Projects listing — grouped by status, cards pop in
+   =========================================================================== */
+
+.pg__group + .pg__group { margin-top: clamp(3.5rem, 8vh, 6rem); }
+
+.pg__groupHead {
+  display: flex; align-items: baseline; gap: 1.25rem;
+  margin-bottom: clamp(1.5rem, 4vh, 2.5rem);
+}
+.pg__groupTitle {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1; color: var(--color-ink);
+  margin: 0;
+}
+.pg__count {
+  font-family: var(--font-body); font-weight: 500;
+  font-size: .7rem; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--color-accent-light);
+}
+/* Hairline running to the right of the group heading. */
+.pg__groupHead::after {
+  content: ""; flex: 1; height: 1px;
+  background: var(--color-border);
+}
+
+/* Pop-in: scale and lift together, so cards arrive rather than slide.
+   JS adds .is-in; without JS they are simply visible. */
+.pg__card {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0) scale(.94);
+  transition:
+    opacity .7s var(--motion-ease),
+    transform .7s var(--motion-ease);
+  will-change: transform, opacity;
+}
+.pg__card.is-in { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+
+/* No JS, or reduced motion: never leave the portfolio invisible. */
+.no-js .pg__card,
+.pg--static .pg__card { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pg__card { opacity: 1; transform: none; transition: none; }
+}
