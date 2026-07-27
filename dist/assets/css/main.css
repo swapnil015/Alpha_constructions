@@ -3195,3 +3195,18 @@ main > section + section { border-top: 1px solid rgba(200, 146, 42, .12); }
   background: var(--color-accent);
   box-shadow: 0 0 0 4px rgba(200,146,42,.15);
 }
+
+/* -- Select dropdown legibility ---------------------------------------------
+   The closed control is styled by the page, but the open popup is painted by
+   the OS on a white background while the <option>s inherited the page's cream
+   text — cream on white, unreadable. color-scheme makes the browser paint the
+   popup dark, and the explicit option colours cover engines that ignore it. */
+select.form-control {
+  color-scheme: dark;
+  color: var(--color-text-primary);
+}
+select.form-control option,
+select.form-control optgroup {
+  background-color: #012624;
+  color: #F4EFE3;
+}
