@@ -1549,16 +1549,11 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   will-change: transform;
 }
 
-/* The supplied film carries burned-in captions ("BUDHANILKANTHA HEIGHTS",
-   "MODERN FACILITIES") across its bottom edge, which land directly on the
-   project name and CTA. The panel is very close to 16:9, so object-fit crops
-   nothing vertically — the band has to be pushed out deliberately.
-   Scaling from a high origin drops roughly 14% of the frame below the panel.
-   Remove this once a caption-free master is supplied. */
-.cp__panel.is-film .cp__zoom {
-  transform: scale(1.2);
-  transform-origin: 50% 30%;
-}
+/* The supplied film carries its own burned-in captions ("BUDHANILKANTHA
+   HEIGHTS", "MODERN FACILITIES") across the bottom of the frame. Those are
+   meant to be read, so the film is shown whole — no crop — and it is the
+   site's overlay that moves out of the way instead (see .is-film below).
+   The caption band occupies roughly the bottom 18% of the picture. */
 
 .cp__scrim {
   position: absolute; inset: 0; pointer-events: none;
@@ -1636,6 +1631,29 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 .cp__cta:hover::after { transform: scaleX(1); }
 .cp__cta:hover i { transform: translateX(12px); }
 
+/* Film panels: lift the site's overlay clear of the burned-in caption band and
+   deepen the mid-gradient, since the text now sits higher up the picture where
+   the default scrim is nearly transparent. */
+/* 23%, not 21%: while the Ken Burns tween sits at scale(1.12) the picture is
+   taller than the panel, which lifts the caption band to ~79.9% of panel
+   height. The overlay has to clear the worst case, not the resting state. */
+.cp__panel.is-film .cp__meta,
+.cp__panel.is-film .cp__cta { bottom: 23%; }
+
+/* The Ken Burns settle starts at scale(1.12), which from a centre origin would
+   clip ~6% off every edge — including the captions — for the whole 16s tween.
+   Anchoring the origin to the bottom means it only ever grows upward, so the
+   caption band is never cropped. */
+.cp__panel.is-film .cp__zoom > * { transform-origin: 50% 100%; }
+
+.cp__panel.is-film .cp__scrim {
+  background: linear-gradient(180deg,
+    rgba(0,0,0,0) 8%,
+    rgba(0,0,0,.28) 34%,
+    rgba(0,0,0,.60) 62%,
+    rgba(0,0,0,.72) 100%);
+}
+
 /* Gold rule that draws across as the next panel takes over. */
 .cp__divider {
   position: absolute; z-index: 4;
@@ -1648,8 +1666,6 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 @media (hover: hover) and (pointer: fine) {
   .cp__panel { cursor: pointer; }
   .cp__panel:hover .cp__zoom { transform: scale(1.04); }
-  /* Same 4% lift, applied on top of the caption crop. */
-  .cp__panel.is-film:hover .cp__zoom { transform: scale(1.25); }
   .cp__panel:hover .cp__scrim { opacity: .82; }
   .cp__panel:hover .cp__media { box-shadow: inset 0 0 0 1px rgba(212, 164, 58, .55); }
   .cp__panel:hover .cp__cta i { transform: translateX(12px); }
