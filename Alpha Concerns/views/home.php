@@ -12,7 +12,8 @@ $blogs = db_all("SELECT * FROM blog_posts WHERE status='published' ORDER BY publ
 $page_scripts =
     '<script src="' . asset('assets/js/sequence.js') . '" defer></script>' .
     '<script src="' . asset('assets/js/story.js')    . '" defer></script>' .
-    '<script src="' . asset('assets/js/services.js') . '" defer></script>';
+    '<script src="' . asset('assets/js/services.js') . '" defer></script>' .
+    '<script src="' . asset('assets/js/projects.js') . '" defer></script>';
 ?>
 
 <main id="main">
@@ -328,40 +329,94 @@ $page_scripts =
     </div>
   </section>
 
-  <!-- FEATURED PROJECTS -->
-  <section class="section section--cream">
-    <div class="container">
-      <div style="display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:1rem;">
-        <div>
-          <div class="eyebrow reveal">Selected Work</div>
-          <h2 class="display display-lg reveal" style="margin-top:1rem;">Featured projects</h2>
-        </div>
-        <a href="/projects" class="btn-text reveal">All Projects</a>
-      </div>
+  <!-- ==========================================================================
+       CURRENT PROJECTS — two cinematic panels (assets/js/projects.js)
+       Panels are sticky and stack: the second rises over the first, which dims
+       and settles back, so the two read as one continuous move rather than two
+       independent cards.
+       ========================================================================== -->
+  <?php
+  /*
+   * Exactly two panels, defined here rather than pulled from the projects
+   * table: Budhanilkantha Heights is not a row in that table yet, and this
+   * section is deliberately a curated pair rather than "whatever is featured".
+   *
+   * `video` is preferred; `image` is the fallback for a project with no film
+   * yet. Imperial Apartment has none — its DB hero_image points at
+   * /uploads/projects/imperial-apartment/hero.jpg, which does not exist.
+   */
+  $currentProjects = [
+      [
+          'slug'     => 'imperial-apartment',
+          'name'     => 'Imperial Apartment',
+          'category' => 'Residential',
+          'location' => 'Naxal, Kathmandu',
+          'status'   => 'Ongoing',
+          'video'    => null,
+          'poster'   => asset('assets/img/story/apartment-facade.jpg'),
+      ],
+      [
+          'slug'     => 'budhanilkantha-heights',
+          'name'     => 'Budhanilkantha Heights',
+          'category' => 'Residential',
+          'location' => 'Budhanilkantha, Kathmandu',
+          'status'   => 'Ongoing',
+          'video'    => asset('assets/video/budhanilkantha-heights.mp4'),
+          'poster'   => asset('assets/video/budhanilkantha-heights.jpg'),
+      ],
+  ];
+  ?>
+  <section class="cp" data-cp aria-label="Current projects">
 
-      <div data-filter-group>
-        <div class="filter-tabs reveal">
-          <button class="filter-tab is-active" data-cat="all">All</button>
-          <button class="filter-tab" data-cat="Residential">Residential</button>
-          <button class="filter-tab" data-cat="Commercial">Commercial</button>
-          <button class="filter-tab" data-cat="Mixed-Use">Mixed-Use</button>
+    <div class="cp__bg" aria-hidden="true"><span class="cp__contours"></span></div>
+
+    <header class="cp__head">
+      <div class="cp__eyebrow">Current Projects</div>
+      <h2 class="cp__title" data-cp-title>Current Projects</h2>
+      <p class="cp__lede">Two developments on site now — followed from first drawing to handover.</p>
+    </header>
+
+    <div class="cp__panels">
+      <?php foreach ($currentProjects as $i => $p): ?>
+      <article class="cp__panel" data-cp-panel="<?= $i ?>">
+
+        <div class="cp__media">
+          <div class="cp__zoom">
+            <?php if ($p['video']): ?>
+              <!-- src is set by projects.js once the panel nears the viewport,
+                   so the file is never fetched for visitors who never reach it. -->
+              <video class="cp__video" data-cp-video
+                     data-src="<?= e($p['video']) ?>"
+                     poster="<?= e($p['poster']) ?>"
+                     muted loop playsinline preload="metadata"
+                     aria-label="<?= e($p['name']) ?> film"></video>
+            <?php else: ?>
+              <img class="cp__still" src="<?= e($p['poster']) ?>"
+                   alt="<?= e($p['name']) ?>, <?= e($p['location']) ?>"
+                   loading="lazy" decoding="async" width="1600" height="900">
+            <?php endif; ?>
+          </div>
+          <span class="cp__scrim" aria-hidden="true"></span>
         </div>
 
-        <div class="projects-grid">
-          <?php foreach ($projects as $p): ?>
-          <a href="/projects/<?= e($p['slug']) ?>" class="project-card reveal" data-cat="<?= e($p['type']) ?>">
-            <div class="project-card__img" style="background-image: linear-gradient(135deg, rgba(20,18,14,0.35), rgba(20,18,14,0.7)), url('<?= e($p['hero_image']) ?>');"></div>
-            <span class="project-card__badge project-card__badge--<?= strtolower($p['status']) ?>"><?= e($p['status']) ?></span>
-            <div class="project-card__overlay">
-              <div class="project-card__type"><?= e($p['type']) ?></div>
-              <div class="project-card__title"><?= e($p['title']) ?></div>
-              <div class="project-card__location"><?= e($p['location']) ?></div>
-            </div>
-          </a>
-          <?php endforeach; ?>
+        <span class="cp__badge"><?= e($p['status']) ?></span>
+
+        <div class="cp__meta">
+          <div class="cp__cat" data-cp-cat><?= e($p['category']) ?></div>
+          <h3 class="cp__name" data-cp-name><?= e($p['name']) ?></h3>
+          <div class="cp__loc" data-cp-loc><?= e($p['location']) ?></div>
         </div>
-      </div>
+
+        <a class="cp__cta" href="/projects/<?= e($p['slug']) ?>">
+          <span>Explore Project</span><i aria-hidden="true">→</i>
+        </a>
+
+        <span class="cp__divider" data-cp-divider aria-hidden="true"></span>
+      </article>
+      <?php endforeach; ?>
     </div>
+
+    <a class="cp__all" href="/projects">All Projects</a>
   </section>
 
   <!-- WHY CHOOSE US -->

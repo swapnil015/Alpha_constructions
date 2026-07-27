@@ -1448,3 +1448,245 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   .svc__grid { animation: none; }
   .svc__figure img { transform: none !important; }
 }
+
+/* ===========================================================================
+   Current Projects — two cinematic panels (home)
+   Driven by assets/js/projects.js.
+   =========================================================================== */
+
+.cp {
+  --cp-bg:    #04302C;
+  --cp-gold:  #D4A43A;
+  --cp-ink:   #F4EFE3;
+  --cp-muted: rgba(244, 239, 227, .66);
+
+  position: relative;
+  background: var(--cp-bg);
+  color: var(--cp-ink);
+  padding: clamp(5rem, 12vh, 8rem) 0 clamp(4rem, 10vh, 7rem);
+  overflow: hidden;
+}
+
+/* -- Background: slow blueprint contours ----------------------------------- */
+.cp__bg { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.cp__contours {
+  position: absolute; inset: -25%;
+  opacity: .04;
+  background-image:
+    repeating-radial-gradient(circle at 18% 30%, transparent 0 58px, var(--cp-ink) 58px 59px),
+    repeating-radial-gradient(circle at 82% 74%, transparent 0 74px, var(--cp-ink) 74px 75px);
+  animation: cpContours 68s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes cpContours {
+  from { transform: translate3d(0, 0, 0) scale(1); }
+  to   { transform: translate3d(-3%, -2%, 0) scale(1.06); }
+}
+
+/* -- Heading --------------------------------------------------------------- */
+.cp__head {
+  position: relative; z-index: 2;
+  width: 80%; max-width: var(--container);
+  margin: 0 auto clamp(3rem, 8vh, 5rem);
+}
+.cp__eyebrow {
+  display: flex; align-items: center; gap: 1rem;
+  font-family: var(--font-body); font-weight: 500;
+  font-size: .7rem; letter-spacing: .34em; text-transform: uppercase;
+  color: var(--cp-gold);
+  margin-bottom: 1.25rem;
+}
+.cp__eyebrow::before { content: ""; width: 2.4rem; height: 1px; background: var(--cp-gold); }
+
+.cp__title {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(2.4rem, 6vw, 5rem);
+  line-height: 1.02; letter-spacing: -.02em;
+  margin: 0 0 1.25rem;
+  /* Characters translate out of a clipped line during the reveal. */
+  overflow: hidden;
+}
+.cp__char { display: inline-block; will-change: transform, opacity; }
+
+.cp__lede { margin: 0; max-width: 46ch; color: var(--cp-muted); }
+
+/* -- Panels ---------------------------------------------------------------- */
+.cp__panels { position: relative; z-index: 2; }
+
+/* Sticky is what makes the pair read as one move: the first stays put while
+   the second climbs over it. */
+.cp__panel {
+  position: sticky;
+  top: 10vh;
+  width: 80%;
+  max-width: 1500px;
+  height: 80vh;
+  margin: 0 auto clamp(4rem, 12vh, 9rem);
+  border-radius: 28px;
+  isolation: isolate;
+}
+.cp__panel:last-child { margin-bottom: 0; }
+
+.cp__media {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #06201E;
+  will-change: transform, clip-path, filter;
+  transition: box-shadow .6s var(--ease-out);
+}
+
+/* Hover zoom lives here; the slow 1.12 settle lives on the media child, so the
+   two never fight over one transform. */
+.cp__zoom {
+  position: absolute; inset: 0;
+  transition: transform .9s var(--ease-out);
+}
+.cp__zoom > * {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
+}
+
+.cp__scrim {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(0,0,0,0) 10%,
+    rgba(0,0,0,.18) 40%,
+    rgba(0,0,0,.82) 100%);
+  transition: opacity .6s var(--ease-out);
+}
+
+/* -- Overlay content ------------------------------------------------------- */
+.cp__badge {
+  position: absolute; z-index: 3;
+  top: clamp(1.25rem, 3vw, 2.25rem); left: clamp(1.25rem, 3vw, 2.25rem);
+  display: inline-flex; align-items: center; gap: .55rem;
+  padding: .5rem 1rem;
+  border: 1px solid rgba(244, 239, 227, .28);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .28);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: var(--font-body); font-weight: 500;
+  font-size: .62rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--cp-ink);
+}
+.cp__badge::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cp-gold);
+  animation: cpPulse 5s ease-in-out infinite;
+}
+@keyframes cpPulse {
+  0%, 86%, 100% { transform: scale(1);   opacity: 1; }
+  92%           { transform: scale(2.1); opacity: .35; }
+}
+
+.cp__meta {
+  position: absolute; z-index: 3;
+  left: clamp(1.25rem, 3vw, 2.75rem);
+  bottom: clamp(1.5rem, 4vw, 2.75rem);
+  max-width: 60%;
+}
+.cp__cat {
+  font-family: var(--font-body); font-weight: 500;
+  font-size: .66rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--cp-gold); margin-bottom: .75rem;
+}
+.cp__name {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(1.9rem, 4vw, 3.4rem);
+  line-height: 1.04; color: var(--cp-ink);
+  margin: 0 0 .6rem;
+}
+.cp__loc {
+  font-size: .88rem; letter-spacing: .04em;
+  color: var(--cp-muted);
+}
+
+.cp__cta {
+  position: absolute; z-index: 3;
+  right: clamp(1.25rem, 3vw, 2.75rem);
+  bottom: clamp(1.5rem, 4vw, 2.75rem);
+  display: inline-flex; align-items: center; gap: .9rem;
+  font-family: var(--font-body); font-weight: 500;
+  font-size: .72rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--cp-ink);
+  padding-bottom: .5rem;
+}
+.cp__cta::after {
+  content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px;
+  background: var(--cp-gold);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform .55s var(--ease-out);
+}
+.cp__cta i { font-style: normal; transition: transform .5s var(--ease-out); }
+.cp__cta:hover::after { transform: scaleX(1); }
+.cp__cta:hover i { transform: translateX(12px); }
+
+/* Gold rule that draws across as the next panel takes over. */
+.cp__divider {
+  position: absolute; z-index: 4;
+  left: 0; right: 0; bottom: 0; height: 1px;
+  background: var(--cp-gold);
+  transform: scaleX(0); transform-origin: left center;
+}
+
+/* -- Hover (desktop, fine pointer only) ------------------------------------ */
+@media (hover: hover) and (pointer: fine) {
+  .cp__panel { cursor: pointer; }
+  .cp__panel:hover .cp__zoom { transform: scale(1.04); }
+  .cp__panel:hover .cp__scrim { opacity: .82; }
+  .cp__panel:hover .cp__media { box-shadow: inset 0 0 0 1px rgba(212, 164, 58, .55); }
+  .cp__panel:hover .cp__cta i { transform: translateX(12px); }
+  .cp__panel:hover .cp__cta::after { transform: scaleX(1); }
+}
+
+/* -- All-projects link ------------------------------------------------------ */
+.cp__all {
+  position: relative; z-index: 2;
+  display: block; width: max-content;
+  margin: clamp(3.5rem, 9vh, 6rem) auto 0;
+  font-family: var(--font-body); font-weight: 500;
+  font-size: .72rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--cp-muted);
+  padding-bottom: .45rem;
+  border-bottom: 1px solid rgba(212, 164, 58, .4);
+  transition: color .45s var(--ease-out), letter-spacing .45s var(--ease-out);
+}
+.cp__all:hover { color: var(--cp-gold); letter-spacing: .3em; }
+
+/* -- Responsive ------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .cp__head, .cp__panel { width: 88%; }
+  .cp__panel { height: 70vh; top: 8vh; }
+  .cp__meta { max-width: 78%; }
+  /* Stacked at the bottom edge the CTA would sit on top of the location. */
+  .cp__cta {
+    left: clamp(1.25rem, 3vw, 2.75rem); right: auto;
+    bottom: auto; top: clamp(1.25rem, 3vw, 2.25rem);
+    transform: none;
+  }
+  .cp__cta { left: auto; right: clamp(1.25rem, 3vw, 2.25rem); }
+}
+
+@media (max-width: 620px) {
+  .cp__panel { height: 62vh; border-radius: 20px; }
+  .cp__media { border-radius: 20px; }
+  .cp__meta { max-width: 88%; }
+  .cp__cta span { display: none; }   /* arrow only */
+}
+
+/* -- No JS / reduced motion ------------------------------------------------- */
+/* Sticky stacking with no scroll-driven hand-off would leave panels covering
+   each other, so fall back to a plain flow. */
+.cp.is-static .cp__panel { position: static; }
+.cp.is-static .cp__media { clip-path: none !important; border-radius: 28px !important; }
+.cp.is-static .cp__divider { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cp__contours { animation: none; }
+  .cp__badge::before { animation: none; }
+  .cp__zoom { transition: none; }
+}
