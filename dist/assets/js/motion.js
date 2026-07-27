@@ -288,7 +288,21 @@ window.Motion = (function () {
     cb(window.scrollY);
   }
 
+  /**
+   * Opt-in masked reveal for any heading marked [data-masked].
+   *
+   * This is the replacement for main.js's [data-split-words], which wraps each
+   * word in a block-level .split-line and therefore forces one word per line
+   * regardless of the available measure. maskedText() groups words into their
+   * real visual lines instead, so headings wrap naturally.
+   */
+  function initMasked() {
+    Array.prototype.slice.call(document.querySelectorAll('[data-masked]'))
+      .forEach(function (el) { maskedText(el); });
+  }
+
   function initChrome() {
+    initMasked();
     // -- Header: hide going down, return going up ---------------------------
     var header = document.querySelector('.site-header');
     if (header) {

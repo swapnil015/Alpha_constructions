@@ -4,12 +4,21 @@ partial('header');
 $services = db_all("SELECT * FROM services WHERE is_active=1 ORDER BY sort_order");
 ?>
 <main id="main">
-  <section class="hero" style="min-height: 60vh;">
+  <!-- Split hero: copy left, site photograph bleeding off the right edge. -->
+  <section class="hero hero--split">
     <div class="hero__bg"></div>
-    <div class="container hero__inner">
-      <div class="eyebrow">Services</div>
-      <h1 class="hero__title" data-split-words>What we build</h1>
-      <p class="hero__sub reveal">A complete construction practice — from structural engineering to interior finishing.</p>
+    <div class="hero--split__inner">
+      <div class="hero--split__copy">
+        <div class="eyebrow">Services</div>
+        <h1 class="hero__title" data-masked>What we build</h1>
+        <p class="hero__sub reveal">A complete construction practice — from structural engineering to interior finishing.</p>
+      </div>
+      <figure class="hero--split__media">
+        <img src="<?= asset('assets/img/hero/services-prajwal-residency.jpg') ?>"
+             alt="Prajwal Residency under construction — RCC frame above the Kathmandu valley."
+             width="1125" height="1500" fetchpriority="high" decoding="async">
+        <span class="hero--split__scrim" aria-hidden="true"></span>
+      </figure>
     </div>
   </section>
   <section class="section section--cream">

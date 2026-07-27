@@ -2392,3 +2392,102 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   object-fit: cover;
   display: block;
 }
+
+/* ===========================================================================
+   Split hero — copy left, photograph bleeding off the right edge
+   Used on /services. Scoped to .hero--split so every other hero is untouched.
+   =========================================================================== */
+
+.hero--split {
+  min-height: min(78vh, 760px);
+  padding: 0;
+  display: block;
+  overflow: hidden;
+}
+
+.hero--split__inner {
+  position: relative; z-index: 2;
+  min-height: inherit;
+  display: grid;
+  grid-template-columns: 46% 54%;
+  align-items: center;
+}
+
+.hero--split__copy {
+  /* Matches .container's left edge so the copy lines up with the page grid. */
+  padding: clamp(4rem, 9vh, 6rem) clamp(2rem, 4vw, 4rem)
+           clamp(4rem, 9vh, 6rem) max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter)));
+}
+
+/* ---------------------------------------------------------------------------
+   Headline.
+
+   The shared .hero__title runs to 7.5rem against a 16ch measure, which in a
+   46% column broke "What we build" onto three lines — one word each, very
+   thin and very tall. Smaller, on a tighter measure, it settles to two lines
+   and reads as a headline rather than a stack.
+   --------------------------------------------------------------------------- */
+.hero--split .hero__title {
+  font-size: clamp(2.6rem, 5vw, 4.75rem);
+  line-height: 1.0;
+  letter-spacing: -0.022em;
+  max-width: 9ch;
+  margin: 1.25rem 0 1.5rem;
+}
+.hero--split .hero__sub { max-width: 40ch; margin-bottom: 0; }
+
+/* -- Media ----------------------------------------------------------------- */
+.hero--split__media {
+  position: relative;
+  margin: 0;
+  align-self: stretch;
+  overflow: hidden;
+}
+/* Absolute, so the portrait source cannot drive the row height. Left in flow
+   its intrinsic 4:3 ratio stretched the hero to 1026px against a 702px cap. */
+.hero--split__media img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  /* The frame sits low in a portrait crop; favour the upper half. */
+  object-position: 50% 38%;
+  display: block;
+}
+/* Fades the photograph into the green so there is no hard vertical seam. */
+.hero--split__scrim {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(to right, var(--color-primary) 0%, rgba(0,48,48,.72) 12%, rgba(0,48,48,0) 44%),
+    linear-gradient(to bottom, rgba(0,30,30,.55) 0%, rgba(0,30,30,0) 26%),
+    linear-gradient(to top, rgba(0,30,30,.45) 0%, rgba(0,30,30,0) 24%);
+}
+
+/* -- Tablet ---------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .hero--split__inner { grid-template-columns: 52% 48%; }
+  .hero--split .hero__title { max-width: 8ch; }
+}
+
+/* -- Mobile: photo above, copy below --------------------------------------- */
+@media (max-width: 760px) {
+  .hero--split { min-height: 0; }
+  .hero--split__inner {
+    grid-template-columns: 1fr;
+    grid-template-areas: "media" "copy";
+  }
+  .hero--split__media {
+    grid-area: media;
+    min-height: 0; height: 44vh;
+  }
+  .hero--split__scrim {
+    background:
+      linear-gradient(to bottom, rgba(0,30,30,.5) 0%, rgba(0,30,30,0) 30%),
+      linear-gradient(to top, var(--color-primary) 0%, rgba(0,48,48,0) 38%);
+  }
+  .hero--split__copy {
+    grid-area: copy;
+    padding: 2rem var(--gutter) clamp(3rem, 8vh, 4rem);
+  }
+  .hero--split .hero__title { max-width: 12ch; font-size: clamp(2.2rem, 10vw, 3rem); }
+  .hero--split .hero__sub { max-width: none; }
+}
