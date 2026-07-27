@@ -153,7 +153,12 @@
         scrub: true          // tied to scroll, so both are visible together
       }
     })
-      .to(media, { scale: 0.96, filter: 'brightness(0.6)', ease: 'none' }, 0)
+      // fromTo, not to: the element's computed filter is 'none', which GSAP
+      // interpolates as brightness(0) — the outgoing film snapped to black at
+      // the start of the hand-off instead of dimming from full brightness.
+      .fromTo(media,
+        { scale: 1,    filter: 'brightness(1)' },
+        { scale: 0.96, filter: 'brightness(0.6)', ease: 'none' }, 0)
       .fromTo(panel.querySelector('[data-cp-divider]'),
         { scaleX: 0 }, { scaleX: 1, ease: 'none' }, 0);
 
