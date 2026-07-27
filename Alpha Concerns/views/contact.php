@@ -6,8 +6,8 @@ $prefill = $_GET['subject'] ?? '';
 ?>
 <main id="main">
   <section class="hero hero--shot pg-hero" style="min-height:56vh;">
-    <img class="hero--shot__img" src="<?= asset('assets/img/hero/why-us-building.jpg') ?>"
-         alt="A glazed commercial building at sunset above the Kathmandu valley."
+    <img class="hero--shot__img" src="<?= asset('assets/img/hero/contact-outlook.jpg') ?>"
+         alt="An architect holding drawings, looking out over the city from a concrete and glass terrace."
          width="1672" height="941" fetchpriority="high" decoding="async">
     <span class="hero--shot__scrim" aria-hidden="true"></span>
     <div class="container hero__inner hero--shot__inner">
