@@ -6,9 +6,9 @@ $flashes = flash_get();
 ?>
 <main id="main">
   <section class="hero hero--shot pg-hero">
-    <img class="hero--shot__img" src="<?= asset('assets/img/hero/services-prajwal-residency.jpg') ?>"
-         alt="A reinforced concrete frame under construction above the Kathmandu valley."
-         width="1200" height="1600" fetchpriority="high" decoding="async">
+    <img class="hero--shot__img" src="<?= asset('assets/img/hero/careers-studio.jpg') ?>"
+         alt="A project team reviewing drawings and a massing model around a studio table."
+         width="1672" height="941" fetchpriority="high" decoding="async">
     <span class="hero--shot__scrim" aria-hidden="true"></span>
     <div class="container hero__inner hero--shot__inner">
       <div class="eyebrow">Careers</div>
