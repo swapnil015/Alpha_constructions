@@ -280,4 +280,13 @@
   // everything below it.
   document.addEventListener('alpha:layout', function () { ScrollTrigger.refresh(); });
   window.addEventListener('load', function () { ScrollTrigger.refresh(); });
+
+  // Crossing the 861px boundary (resize, or a tablet rotating) makes
+  // gsap.matchMedia tear down one context and build the other. The new
+  // context's pin needs a refresh to measure against the new viewport.
+  var mqTimer = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(mqTimer);
+    mqTimer = setTimeout(function () { ScrollTrigger.refresh(); }, 200);
+  }, { passive: true });
 })();

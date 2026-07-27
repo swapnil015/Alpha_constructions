@@ -66,7 +66,15 @@
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var isSmall      = window.matchMedia('(max-width: 720px)').matches;
-  if (isSmall) CONFIG.concurrency = 5;
+  if (isSmall) {
+    CONFIG.concurrency = 5;
+    // On a phone the canvas is a small 3:2 band, so making the user scroll
+    // 4+ viewports past it is punishing. Tighter travel keeps the whole
+    // sequence inside roughly two screens.
+    CONFIG.pxPerFrame  = 8;
+    CONFIG.minTravelVh = 1.6;
+    CONFIG.maxTravelVh = 2.4;
+  }
 
   // -------------------------------------------------------------------------
   // Frame store

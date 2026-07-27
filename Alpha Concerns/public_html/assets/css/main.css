@@ -1691,13 +1691,6 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   .cp__head, .cp__panel { width: 88%; }
   .cp__panel { height: 70vh; top: 8vh; }
   .cp__meta { max-width: 78%; }
-  /* Stacked at the bottom edge the CTA would sit on top of the location. */
-  .cp__cta {
-    left: clamp(1.25rem, 3vw, 2.75rem); right: auto;
-    bottom: auto; top: clamp(1.25rem, 3vw, 2.25rem);
-    transform: none;
-  }
-  .cp__cta { left: auto; right: clamp(1.25rem, 3vw, 2.25rem); }
 }
 
 @media (max-width: 620px) {
@@ -1990,4 +1983,175 @@ textarea.form-control { min-height: 150px; resize: vertical; }
 @media (prefers-reduced-motion: reduce) {
   .why__blueprint { animation: none; }
   .why__card, .why__icon, .why__cardTitle, .why__cardDesc { transition: none; }
+}
+
+/* ===========================================================================
+   Mobile refinements
+   ---------------------------------------------------------------------------
+   Loaded last so it settles conflicts between the per-section blocks above.
+   Three things this fixes, all measured at 390x844:
+     • tap targets down to 17px wide (44px is the accepted minimum)
+     • body/label text down to 10.4px
+     • the Current Projects CTA resolving to 12px wide
+   =========================================================================== */
+
+@media (max-width: 760px) {
+
+  /* -- Tap targets ---------------------------------------------------------
+     Padding rather than fixed sizes, so the visual weight of the type is
+     unchanged and only the hit area grows. */
+
+  .hamburger {
+    width: 44px; height: 44px;
+    display: grid; place-content: center; gap: 5px;
+    margin-right: -8px;                /* keep the icon optically aligned */
+  }
+
+  .svc__railItem {
+    min-width: 44px; min-height: 44px;
+    display: inline-grid; place-items: center;
+    padding: 0;
+  }
+
+  .svc__nav button { width: 48px; height: 48px; }
+
+  .btn-text,
+  .story__link,
+  .svc__all,
+  .svc__cta,
+  .cp__all,
+  .why__cta {
+    min-height: 44px;
+    display: inline-flex; align-items: center;
+  }
+
+  .footer-list a,
+  .mobile-menu a { display: block; padding-block: .55rem; }
+
+  .filter-tab { min-height: 44px; padding-inline: 1rem; }
+
+  /* -- Current Projects overlay -------------------------------------------
+     The 900px block set left/right/top/bottom in two competing rules, which
+     collapsed the CTA to a 12px sliver. One rule, one position. */
+
+  .cp__cta {
+    top: auto; left: var(--gutter); right: auto;
+    bottom: 1.15rem;
+    min-height: 44px;
+    padding-bottom: .4rem;
+  }
+  .cp__cta span { display: inline; }     /* the label was hidden, leaving only the arrow */
+  .cp__meta { bottom: 4.4rem; max-width: 100%; }
+
+  /* Film panels keep their lift: the burned-in captions are still along the
+     bottom of the picture, and a 4:3 crop of a 16:9 source trims the sides,
+     not the band. */
+  .cp__panel.is-film .cp__cta  { bottom: 20%; }
+  .cp__panel.is-film .cp__meta { bottom: calc(20% + 3.4rem); }
+
+  /* -- Legibility ----------------------------------------------------------
+     Nothing below 12px. Letter-spacing eases off as size drops, otherwise
+     tracked-out caps get hard to read at small sizes. */
+
+  .eyebrow,
+  .svc__eyebrow,
+  .story__eyebrow,
+  .cp__eyebrow,
+  .why__eyebrow,
+  .cp__cat,
+  .stat__label,
+  .svc__statLabel,
+  .project-card__type {
+    font-size: 12px;
+    letter-spacing: .22em;
+  }
+
+  .btn,
+  .btn-text,
+  .story__link,
+  .svc__all,
+  .svc__cta,
+  .cp__all,
+  .cp__cta,
+  .footer-heading {
+    font-size: 12.5px;
+    letter-spacing: .16em;
+  }
+
+  .seq__hint,
+  .seq__loader-pct { font-size: 11px; letter-spacing: .24em; }
+
+  .cp__loc { font-size: 13px; }
+  .footer-list a, .footer-list li { font-size: 14.5px; }
+
+  /* -- Rhythm --------------------------------------------------------------
+     Section padding scaled back; at phone width the desktop rhythm reads as
+     dead space rather than generosity. */
+  .section { padding-block: clamp(3.5rem, 9vh, 5rem); }
+  .why      { padding-block: clamp(3.5rem, 9vh, 5rem); }
+  .cp       { padding: clamp(3.5rem, 9vh, 5rem) 0 clamp(2.5rem, 7vh, 4rem); }
+
+  /* The stats bar wraps to 2x2 rather than a cramped single row. */
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 2rem 1rem; }
+}
+
+/* Very narrow phones -------------------------------------------------------- */
+@media (max-width: 400px) {
+  .cp__name  { font-size: 1.55rem; }
+  .cp__meta  { max-width: 100%; }
+  .svc__item { flex-basis: 90%; }
+}
+
+/* -- Mobile: remaining tap targets and micro-type ---------------------------
+   Each of these was measured rather than guessed: the footer legal link at
+   78x16, social icons at 38x38, cookie buttons at 39px tall, and the ONGOING
+   badge at 9.9px. */
+@media (max-width: 760px) {
+  .footer-bottom a { display: inline-block; padding-block: .7rem; }
+
+  .social-row { gap: .4rem; }
+  .social-row a {
+    width: 44px; height: 44px;
+    display: inline-grid; place-items: center;
+  }
+
+  /* .cookie-bar sets its own type scale, so this needs the extra specificity. */
+  .cookie-bar .btn {
+    min-height: 44px;
+    font-size: 12.5px;
+    padding-inline: 1.4rem;
+  }
+
+  .cp__badge { font-size: 11.5px; letter-spacing: .18em; padding: .55rem 1rem; }
+
+  .topbar, .topbar__left, .topbar__right, .topbar a, .topbar span { font-size: 11.5px; }
+  .preloader__sub { font-size: 11.5px; }
+}
+
+/* -- Touch-sized hit areas up to 1024px -------------------------------------
+   The layout switches to its touch form at 860px (services scroller) but the
+   type fixes above stop at 760px, which left tablets between the two with
+   17px rail buttons. Hit areas are widened for anything plausibly touched,
+   without changing the type scale — that stays width-driven. */
+@media (max-width: 1024px) {
+  .hamburger { width: 44px; height: 44px; display: grid; place-content: center; gap: 5px; }
+
+  .svc__railItem { min-width: 44px; min-height: 44px; display: inline-grid; place-items: center; padding: 0; }
+  .svc__nav button { width: 48px; height: 48px; }
+
+  .btn-text,
+  .story__link,
+  .svc__all,
+  .svc__cta,
+  .cp__all,
+  .cp__cta,
+  .filter-tab { min-height: 44px; display: inline-flex; align-items: center; }
+
+  .footer-list a,
+  .footer-bottom a,
+  .mobile-menu a { display: inline-block; padding-block: .6rem; }
+
+  .social-row a { width: 44px; height: 44px; display: inline-grid; place-items: center; }
+
+  .cookie-bar .btn { min-height: 44px; }
 }
