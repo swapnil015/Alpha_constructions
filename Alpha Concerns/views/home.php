@@ -4,8 +4,6 @@ partial('head', compact('page_title','page_description'));
 partial('header');
 $projects = db_all("SELECT * FROM projects WHERE is_published=1 AND is_featured=1 ORDER BY sort_order LIMIT 6");
 $services = db_all("SELECT * FROM services WHERE is_active=1 ORDER BY sort_order LIMIT 6");
-$testimonials = db_all("SELECT * FROM testimonials WHERE is_active=1 ORDER BY sort_order");
-$blogs = db_all("SELECT * FROM blog_posts WHERE status='published' ORDER BY published_at DESC LIMIT 3");
 
 // Hero is a scroll-driven frame sequence (assets/js/sequence.js). Loaded only
 // here — the engine is dead weight on every other page.
@@ -513,29 +511,6 @@ $page_scripts =
     </div>
   </section>
 
-  <!-- TESTIMONIALS -->
-  <?php if ($testimonials): ?>
-  <section class="section section--cream">
-    <div class="container-md" data-testimonials>
-      <div style="text-align:center; margin-bottom:3rem;">
-        <div class="eyebrow reveal">In Their Words</div>
-      </div>
-      <?php foreach ($testimonials as $t): ?>
-      <div class="testimonial reveal">
-        <span class="testimonial__mark">"</span>
-        <p class="testimonial__text"><?= e($t['review_text']) ?></p>
-        <div class="testimonial__name"><?= e($t['client_name']) ?></div>
-        <?php if ($t['project_name']): ?><div class="testimonial__project"><?= e($t['project_name']) ?></div><?php endif; ?>
-      </div>
-      <?php endforeach; ?>
-      <div class="testimonial-controls">
-        <button data-prev aria-label="Previous testimonial">←</button>
-        <button data-next aria-label="Next testimonial">→</button>
-      </div>
-    </div>
-  </section>
-  <?php endif; ?>
-
   <!-- CTA BANNER -->
   <section class="cta-banner">
     <div class="cta-banner__bg"></div>
@@ -545,32 +520,6 @@ $page_scripts =
       <a href="/contact" class="btn btn-primary reveal">Let's Talk</a>
     </div>
   </section>
-
-  <!-- BLOG PREVIEW -->
-  <?php if ($blogs): ?>
-  <section class="section section--surface">
-    <div class="container">
-      <div style="display:flex; justify-content:space-between; align-items:end; flex-wrap:wrap; gap:1rem; margin-bottom:3rem;">
-        <div>
-          <div class="eyebrow reveal">Insights & News</div>
-          <h2 class="display display-lg reveal" style="margin-top:1rem;">From the field</h2>
-        </div>
-        <a href="/blog" class="btn-text reveal">Read All Articles</a>
-      </div>
-      <div class="cards-grid" style="margin-top:0;">
-        <?php foreach ($blogs as $b): ?>
-        <a href="/blog/<?= e($b['slug']) ?>" class="service-card reveal" style="aspect-ratio: 4/5; display:flex; flex-direction:column; justify-content:flex-end;">
-          <div class="eyebrow" style="margin-bottom:1rem;"><?= e($b['category'] ?: 'Insight') ?></div>
-          <h3 class="service-card__title" style="font-family:var(--font-display); font-weight:400; font-size:1.5rem; line-height:1.2;"><?= e($b['title']) ?></h3>
-          <div style="margin-top:1rem; font-size:.75rem; color:var(--color-text-muted); letter-spacing:.15em; text-transform:uppercase;">
-            <?= fmt_date($b['published_at']) ?> · <?= read_time($b['body']) ?> min read
-          </div>
-        </a>
-        <?php endforeach; ?>
-      </div>
-    </div>
-  </section>
-  <?php endif; ?>
 
 </main>
 
