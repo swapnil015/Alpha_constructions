@@ -1241,7 +1241,16 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   /* Descriptions run two or three lines — reserve three. */
   min-height: calc(1.85em * 3);
 }
-.svc__word { display: inline-block; will-change: transform, opacity; }
+/* NO will-change ON SPLIT TEXT FRAGMENTS — read before adding it back.
+   These spans are one per word/character, so a single headline mints dozens
+   of them. A static will-change promotes every one to its own compositor
+   layer for the life of the page, and the homepage was carrying 199 promoted
+   elements out of 720 that way. Chrome's own guidance is to set it on a small
+   number of elements and only while they animate. GSAP tweens transform and
+   opacity here, which Chrome promotes for the duration of the tween anyway —
+   and the character reveals are `once: true`, so the layer outlived the
+   animation by the entire session. */
+.svc__word { display: inline-block; }
 
 .svc__rule {
   display: block; width: clamp(2.5rem, 5vw, 4rem); height: 1px;
@@ -1255,7 +1264,7 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   gap: clamp(1.5rem, 3.6vw, 3.4rem);
   margin: 0 0 clamp(1.75rem, 4vh, 2.8rem);
 }
-.svc__stat { display: grid; gap: .5rem; will-change: transform, opacity; }
+.svc__stat { display: grid; gap: .5rem; }
 .svc__statIcon { width: 26px; height: 26px; color: var(--svc-gold); }
 .svc__statValue {
   font-family: var(--font-display); font-weight: 300;
@@ -1506,7 +1515,7 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   /* Characters translate out of a clipped line during the reveal. */
   overflow: hidden;
 }
-.cp__char { display: inline-block; will-change: transform, opacity; }
+.cp__char { display: inline-block; }
 
 .cp__lede { margin: 0; max-width: 46ch; color: var(--cp-muted); }
 
@@ -1794,7 +1803,7 @@ textarea.form-control { min-height: 150px; resize: vertical; }
   max-width: 18ch;
 }
 .why__word { display: inline-block; overflow: hidden; vertical-align: bottom; }
-.why__char { display: inline-block; will-change: transform, opacity; }
+.why__char { display: inline-block; }
 
 .why__statement {
   margin: 0 auto; max-width: 44ch;
