@@ -41,12 +41,23 @@
       orientation:     'vertical',
       gestureOrientation: 'vertical',
     });
-    function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
+    /* DRIVE LENIS FROM EXACTLY ONE CLOCK — read this before touching it.
+       lenis.raf(t) derives its delta as `t - lastT`, and in lerp mode that
+       delta goes into `1 - Math.exp(-60 * lerp * delta)`. Feed it two clocks
+       and the deltas alternate sign, because gsap.ticker.time counts from
+       gsap's own start while requestAnimationFrame counts from navigation.
+       A negative delta makes that factor greater than 1 *in the negative
+       direction* (at lerp .085 and a 300ms offset it is about -3.6), so the
+       scroll position is thrown away from its target and dragged back on the
+       next call — every frame, for as long as the page is scrolling. That is
+       the whole-page shudder this used to have. One clock only. */
     if (window.gsap && window.ScrollTrigger) {
       lenis.on('scroll', window.ScrollTrigger.update);
       window.gsap.ticker.add((time) => lenis.raf(time * 1000));
       window.gsap.ticker.lagSmoothing(0);
+    } else {
+      const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
     }
     // Expose for any nav anchor smooth-scroll
     window.__lenis = lenis;
